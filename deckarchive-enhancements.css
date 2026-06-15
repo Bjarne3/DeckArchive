@@ -1,0 +1,365 @@
+.site-edit-controls {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid rgba(232, 211, 160, 0.24);
+  border-radius: 8px;
+  background: rgba(17, 14, 11, 0.9);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+}
+
+.site-edit-button {
+  min-height: 36px;
+  padding: 0 13px;
+  border: 1px solid rgba(232, 211, 160, 0.25);
+  border-radius: 8px;
+  color: #1b1309;
+  background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+  font-weight: 900;
+}
+
+.site-edit-button.quiet {
+  color: var(--ink-muted);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.site-edit-status {
+  color: #cdeecf;
+  font-size: 0.78rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.is-editable-text {
+  outline: 1px dashed rgba(108, 167, 216, 0.7);
+  outline-offset: 3px;
+  border-radius: 4px;
+  cursor: text;
+}
+
+.is-editable-text:focus {
+  outline: 2px solid rgba(108, 167, 216, 0.95);
+  background: rgba(108, 167, 216, 0.12);
+}
+
+.tab-nav {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.tab-content.game-night-mode > :not(.game-night-panel) {
+  display: none !important;
+}
+
+.game-night-panel {
+  display: grid;
+  gap: 18px;
+}
+
+.game-night-card,
+.game-night-entry,
+.game-night-stat {
+  border: 1px solid rgba(232, 211, 160, 0.2);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(231, 212, 166, 0.11), rgba(20, 15, 11, 0.88)), rgba(39, 29, 19, 0.9);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.38);
+}
+
+.game-night-card {
+  padding: 18px;
+}
+
+.game-night-form {
+  display: grid;
+  gap: 14px;
+}
+
+.game-night-form-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 12px;
+}
+
+.game-night-games {
+  display: grid;
+  gap: 10px;
+}
+
+.game-night-game-row {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: 10px;
+  align-items: end;
+}
+
+.game-night-game-row > span {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--gold-bright);
+  font-size: 0.82rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.game-night-fieldset {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(232, 211, 160, 0.16);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.game-night-check-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.game-night-check-grid.tags {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 1px solid rgba(232, 211, 160, 0.17);
+  border-radius: 8px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.88rem;
+}
+
+.checkbox-row input {
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  accent-color: var(--gold);
+}
+
+.game-night-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.game-night-actions .icon-button {
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.game-night-actions span {
+  color: var(--ink-muted);
+  font-weight: 800;
+}
+
+.game-night-list {
+  display: grid;
+  gap: 12px;
+}
+
+.game-night-entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: start;
+  padding: 16px;
+}
+
+.game-night-entry h3,
+.game-night-card h3 {
+  margin: 0;
+  color: #fff1d0;
+  font-family: var(--font-display);
+  letter-spacing: 0;
+}
+
+.game-night-entry p {
+  margin: 0;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+.game-night-entry strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--gold-bright);
+}
+
+.game-night-games-list {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.game-night-games-list li {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 0.9fr) minmax(0, 1.3fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid rgba(232, 211, 160, 0.14);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.game-night-games-list span {
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.game-night-games-list strong {
+  margin: 0;
+  color: #fff1d0;
+}
+
+.game-night-games-list em {
+  color: var(--ink-muted);
+  font-style: normal;
+  line-height: 1.35;
+}
+
+.game-night-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  grid-column: 1 / -1;
+}
+
+.game-night-meta span,
+.game-night-tag-cloud span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid rgba(232, 211, 160, 0.18);
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 0.84rem;
+}
+
+.game-night-delete {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid rgba(214, 92, 74, 0.35);
+  border-radius: 8px;
+  color: #ffd4ca;
+  background: rgba(214, 92, 74, 0.12);
+}
+
+.game-night-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+  gap: 12px;
+}
+
+.game-night-stat {
+  display: grid;
+  gap: 6px;
+  min-height: 128px;
+  padding: 14px;
+}
+
+.game-night-stat p,
+.game-night-stat span {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.8rem;
+}
+
+.game-night-stat strong {
+  color: #fff1d0;
+  font-family: var(--font-display);
+  font-size: 1.42rem;
+  line-height: 1.05;
+}
+
+.game-night-two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.game-night-table {
+  width: 100%;
+  margin-top: 12px;
+  border-collapse: collapse;
+  color: var(--ink-muted);
+}
+
+.game-night-table th,
+.game-night-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(232, 211, 160, 0.14);
+  text-align: left;
+}
+
+.game-night-table th {
+  color: var(--gold-bright);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.game-night-tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.game-night-tag-cloud strong {
+  color: var(--gold-bright);
+}
+
+@media (max-width: 1180px) {
+  .game-night-stat-grid,
+  .game-night-check-grid.tags {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .site-edit-controls {
+    position: sticky;
+    top: 8px;
+    right: auto;
+    z-index: 60;
+    width: min(100% - 20px, 1440px);
+    margin: 8px auto 0;
+    justify-content: flex-end;
+  }
+
+  .tab-nav,
+  .game-night-form-grid,
+  .game-night-game-row,
+  .game-night-games-list li,
+  .game-night-check-grid,
+  .game-night-check-grid.tags,
+  .game-night-stat-grid,
+  .game-night-two-column,
+  .game-night-entry {
+    grid-template-columns: 1fr;
+  }
+
+  .game-night-meta {
+    grid-column: auto;
+  }
+}
