@@ -119,7 +119,7 @@
       description:
         `First game of the night was interesting, Jon Irenicus hit the table for the first time and gave hella presents. This was not in favor of Bjarne, who was out turn 5 for doing too much too quick. Pieter and Lenny were battling for the win, but forgot Joost in the process. The one armed bandit took home the first win of the night.
 
-Second game, Lenny played his reshaped Zimone deck again, now helmed by Toothy, Imaginary Friend and Pir, Imaginative Rascal. The value proved too much in the end. Joost made an awful deadl, Pieter gave up a good fight, Bjarne was out on turn 6 again. Jon Irenicus was twice removed this time, as it should, and proceeded to do nothing.
+Second game, Lenny played his reshaped Zimone deck again, now helmed by Toothy, Imaginary Friend and Pir, Imaginative Rascal. The value proved too much in the end. Joost made an awful deal, Pieter gave up a good fight, Bjarne was out on turn 6 again. Jon Irenicus was twice removed this time, as it should, and proceeded to do nothing.
 
 Then Anikthea hit the field the third game. Next to him was a Mendicant Core happening that made copies of artifacts, but the enchantment deck showed how copying really worked. Before we knew it, there were too much 7/7 sagas causing havoc, and yet again everybody had to pack it in. Joost's Karlov was a menace, but no match. Bjarne had a 37/37 mana dork and lands for days, could not make an impact once again, and was a easy target.
 
