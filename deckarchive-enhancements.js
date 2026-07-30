@@ -106,6 +106,88 @@
   ];
   const GAME_NIGHT_SEED = [
     {
+      id: "2026-07-28-no-takesies-backsies",
+      date: "2026-07-28",
+      nightWinner: "Bjarne",
+      games: [
+        {
+          number: 1,
+          winner: "Joost",
+          deck: "Karlov of the Ghost Council",
+          participants: ["Pieter", "Joost", "Huub", "Bjarne"],
+        },
+        {
+          number: 2,
+          winner: "Bjarne",
+          deck: "Magus Lucea Kane",
+          participants: ["Pieter", "Joost", "Huub", "Bjarne"],
+        },
+        {
+          number: 3,
+          winner: "Huub",
+          deck: "Chishiro, the Shattered Blade",
+          participants: ["Pieter", "Joost", "Huub", "Bjarne"],
+        },
+        {
+          number: 4,
+          winner: "Bjarne",
+          deck: "Witherbloom, the Balancer",
+          participants: ["Pieter", "Joost", "Huub", "Bjarne"],
+        },
+      ],
+      description:
+        `With Pieter taking Lenny's seat, the opener largely passed Huub and Bjarne by: Emiel had no real win condition in sight, while a badly shuffled Muldrotha deck never got moving. Pieter and Joost fought it out until Joost closed with commander damage and Aetherflux Reservoir.
+
+Game two belonged to Magus Lucea Kane. Bjarne fetched an unreasonable number of lands on turn five and buried the table in X-spell value, with a timely Aetherflux activation from Huub helping remove a deeply unconvinced Pieter.
+
+Huub answered in game three. Chishiro eventually dealt the final commander damage to Joost, the last player standing. Pieter's staxier deck drew the table's attention early, while Bjarne went from a commanding position to eliminating himself by stealing Joost's Vilis, Broker of Blood while Sheoldred was on the battlefield.
+
+For the finale, the table declared no take-backs—and immediately demonstrated why take-backs exist. Bjarne missed a trigger worth roughly ninety life, Huub cast several spells that did considerably less than advertised, and Joost wrestled with his own triggers. Perhaps because he had insisted on the rules, Pieter was removed first. Bjarne eventually stabilized and won with Witherbloom, with Essence Warden doing heroic work to keep him alive.`,
+      participants: ["Pieter", "Joost", "Huub", "Bjarne"],
+      tags: ["Mana issues", "Salt spike", "Long turns"],
+    },
+    {
+      id: "2026-07-17-magic-con-amsterdam",
+      date: "2026-07-17",
+      nightWinner: "Lenny",
+      games: [
+        {
+          number: 1,
+          winner: "Lenny",
+          deck: "Mendicant Core",
+          participants: ["Lenny", "Joost", "Huub", "Bjarne"],
+        },
+        {
+          number: 2,
+          winner: "Huub",
+          deck: "Chishiro, the Shattered Blade",
+          participants: ["Lenny", "Joost", "Huub", "Bjarne", "Stijn"],
+        },
+        {
+          number: 3,
+          winner: "Lenny",
+          deck: "Anikthea",
+          participants: ["Lenny", "Joost", "Huub", "Bjarne"],
+        },
+        {
+          number: 4,
+          winner: "Joost",
+          deck: "Karlov of the Ghost Council",
+          participants: ["Lenny", "Joost", "Huub", "Bjarne"],
+        },
+      ],
+      description:
+        `The MagicCon opener was defined by Lenny's explosive Mendicant Core start and an alarming amount of artifact production. The table kneecapped him early, but he rebuilt, let everyone underestimate the recovery, and stole back the win.
+
+Stijn joined for game two and quickly turned an Orzhov deck into a Voltron problem for the whole table. While Joost, Lenny, and Bjarne spent too much time fighting one another, Huub quietly built up Chishiro and eventually overpowered Stijn to take the game.
+
+The third game came late in the evening and ended with Lenny's Anikthea enchantment engine outvaluing the table for his second win of the day.
+
+Joost took the finale with Karlov of the Ghost Council once everyone was already a little drunk and a lot less precise. Lenny, on Teysa, tutored for an answer to a Karlov that was ready to deal lethal commander damage—only for the table to discover, to general annoyance, that the deck apparently did not contain the removal spell he needed.`,
+      participants: ["Lenny", "Joost", "Huub", "Bjarne", "Stijn"],
+      tags: ["Big comeback", "Politics", "Long turns"],
+    },
+    {
       id: "2026-06-17-first-game-night",
       date: "2026-06-17",
       nightWinner: "",
@@ -137,6 +219,96 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
         { name: "Toothy, Imaginary Friend", shortName: "Toothy" },
         { name: "Pir, Imaginative Rascal", shortName: "Pir" },
       ],
+    },
+    {
+      deckName: "Ardenn & Rograkh",
+      commanders: [
+        { name: "Ardenn, Intrepid Archaeologist", shortName: "Ardenn" },
+        { name: "Rograkh, Son of Rohgahh", shortName: "Rograkh" },
+      ],
+    },
+  ];
+  const ARCHIVED_DECKS = [
+    {
+      owner: "Joost",
+      deckName: "Aragorn, the Uniter",
+      commander: "Aragorn, the Uniter",
+      colors: ["W", "U", "R", "G"],
+      note: "Joost's former four-color Voltron build: budget roots, a respectable clock, and enough equipment to make Aragorn a real threat.",
+      tags: ["Voltron", "Equipment", "Combat"],
+      salt: 5,
+    },
+    {
+      owner: "Joost",
+      deckName: "Ashling Flame Dancer",
+      commander: "Ashling, Flame Dancer",
+      colors: ["R"],
+      note: "A retired mono-red spellslinger list that could turn an ordinary-looking board into a lethal burst once Ashling stayed in play.",
+      tags: ["Burn", "Spellslinger", "Burst Damage"],
+      salt: 6,
+    },
+    {
+      owner: "Joost",
+      deckName: "Meren of Clan Nel Toth",
+      commander: "Meren of Clan Nel Toth",
+      colors: ["B", "G"],
+      note: "An old Golgari recursion deck that steadily converted creatures, sacrifice triggers, and the graveyard into an exhausting value engine.",
+      tags: ["Graveyard", "Recursion", "Sacrifice"],
+      salt: 7,
+    },
+    {
+      owner: "Joost",
+      deckName: "Vilis, Broker of Blood",
+      commander: "Vilis, Broker of Blood",
+      colors: ["B"],
+      note: "Mono-black life-as-a-resource excess. Expensive to deploy, frightening once established, and capable of drawing a deeply unreasonable number of cards.",
+      tags: ["Mono-black", "Card Draw", "Life as Resource"],
+      salt: 8,
+    },
+    {
+      owner: "Joost",
+      deckName: "K'rrik, Son of Yawgmoth",
+      commander: "K'rrik, Son of Yawgmoth",
+      colors: ["B"],
+      note: "A retired mono-black engine that treated life as mana and sensible pacing as optional.",
+      tags: ["Mono-black", "Life as Resource", "Combo"],
+      salt: 9,
+    },
+    {
+      owner: "Joost",
+      deckName: "Animar, Soul of Elements",
+      commander: "Animar, Soul of Elements",
+      colors: ["U", "R", "G"],
+      note: "Temur creature-combo value that made every future creature cheaper and every unanswered turn significantly more dangerous.",
+      tags: ["Creatures", "Counters", "Combo"],
+      salt: 8,
+    },
+    {
+      owner: "Lenny",
+      deckName: "Zimone, Paradox Sculptor",
+      commander: "Zimone, Paradox Sculptor",
+      colors: ["G", "U"],
+      note: "The earlier form of Lenny's Simic counters deck, archived after the strategy moved over to Toothy and Pir.",
+      tags: ["Counters", "Card Draw", "Simic"],
+      salt: 6,
+    },
+    {
+      owner: "Bjarne",
+      deckName: "Greta, Sweettooth Scourge",
+      commander: "Greta, Sweettooth Scourge",
+      colors: ["B", "G"],
+      note: "A Food-and-sacrifice deck that ground out value one snack at a time before leaving the active rotation.",
+      tags: ["Food", "Sacrifice", "Golgari"],
+      salt: 5,
+    },
+    {
+      owner: "Bjarne",
+      deckName: "Grolnok, the Omnivore",
+      commander: "Grolnok, the Omnivore",
+      colors: ["G", "U"],
+      note: "A frog-led self-mill deck that turned exile into a second hand and made bookkeeping part of the win condition.",
+      tags: ["Self-mill", "Value", "Simic"],
+      salt: 7,
     },
   ];
   const PARTNER_IMAGE_CACHE_KEY = "deckarchive:partner-commander-images:v1";
@@ -473,6 +645,211 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     });
   }
 
+  function scoreTone(score) {
+    if (score >= 8) return "danger";
+    if (score >= 5) return "medium";
+    return "calm";
+  }
+
+  function manaDots(colors, label) {
+    const names = { W: "White", U: "Blue", B: "Black", R: "Red", G: "Green" };
+    return `<div class="mana-row" aria-label="${escapeHtml(label)} colors">${colors
+      .map(
+        (color) =>
+          `<span class="mana-dot mana-${color}" title="${names[color]}">${color}</span>`
+      )
+      .join("")}</div>`;
+  }
+
+  function scoreGrid(scores) {
+    const visibleScores = [
+      ["Oppressiveness", scores.oppressiveness],
+      ["Win Threat", scores.winThreat],
+      ["Fun to Face", scores.funToFace],
+      ["Table Panic", scores.tablePanic],
+      ["Turn Crimes", scores.turnCrimes],
+      ["Pod Lore", scores.podLore],
+    ];
+    return `<div class="score-grid compact">${visibleScores
+      .map(
+        ([label, score]) => `
+          <div class="score-pip ${scoreTone(score)}" title="${escapeHtml(label)} ${score}/10">
+            <span>${escapeHtml(label)}</span>
+            <strong>${score}/10</strong>
+            <div class="mini-meter" aria-hidden="true"><span style="width:${score * 10}%"></span></div>
+          </div>`
+      )
+      .join("")}</div>`;
+  }
+
+  function customDeckCard(deck, archived) {
+    const saltLabel =
+      deck.salt >= 9
+        ? "Kill them first"
+        : deck.salt >= 7
+          ? "Powerful but manageable"
+          : deck.salt >= 5
+            ? "Respectable menace"
+            : "Mostly fine";
+    const scores = deck.scores || {
+      oppressiveness: Math.max(2, deck.salt - 2),
+      winThreat: deck.salt,
+      funToFace: Math.max(4, 10 - Math.floor(deck.salt / 3)),
+      tablePanic: deck.salt,
+      turnCrimes: Math.max(2, Math.floor(deck.salt / 2)),
+      podLore: Math.max(3, deck.salt - 1),
+    };
+    return `
+      <article class="deck-card ${archived ? "archived-deck-card" : "custom-active-deck"}"
+        data-custom-deck="${escapeHtml(deck.deckName)}"
+        data-owner="${escapeHtml(deck.owner)}"
+        data-salt="${deck.salt}">
+        <div class="deck-art-shell">
+          <div class="card-fallback">Loading commander art…</div>
+          <div class="salt-medallion ${scoreTone(deck.salt)}"><strong>${deck.salt}/10</strong></div>
+          ${archived ? '<span class="archive-ribbon">Archived</span>' : ""}
+        </div>
+        <div class="deck-card-body">
+          <div class="deck-card-title-row">
+            <div><p class="eyebrow">${escapeHtml(deck.owner)}</p><h3>${escapeHtml(deck.deckName)}</h3></div>
+            ${manaDots(deck.colors, deck.deckName)}
+          </div>
+          <p class="commander-line">${escapeHtml(deck.commander)}</p>
+          <p class="strategy">${escapeHtml(deck.note)}</p>
+          ${deck.roast ? `<blockquote>${escapeHtml(deck.roast)}</blockquote>` : ""}
+          <div class="tag-row">${deck.tags
+            .map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`)
+            .join("")}</div>
+          <div class="salt-strip ${scoreTone(deck.salt)}">
+            <span class="salt-strip-icon" aria-hidden="true">⚠</span>
+            <span>Salt Rating</span><strong>${escapeHtml(saltLabel)}</strong>
+          </div>
+          ${archived ? "" : scoreGrid(scores)}
+        </div>
+      </article>
+    `;
+  }
+
+  function hydrateCustomCardImages(root) {
+    root.querySelectorAll("[data-custom-deck]").forEach((card) => {
+      if (card.dataset.imageLoading === "true") return;
+      card.dataset.imageLoading = "true";
+      const name = cleanText(card.querySelector(".commander-line")?.textContent || "");
+      loadCommanderImage(name).then((imageUrl) => {
+        if (!imageUrl || !card.isConnected) return;
+        const shell = card.querySelector(".deck-art-shell");
+        const fallback = shell?.querySelector(".card-fallback");
+        const image = document.createElement("img");
+        image.src = imageUrl;
+        image.alt = `${name} card art`;
+        image.loading = "lazy";
+        if (fallback) fallback.replaceWith(image);
+        else shell?.prepend(image);
+      });
+    });
+  }
+
+  function updateScoreCard(card, scores) {
+    const grid = card.querySelector(".score-grid");
+    if (grid) grid.outerHTML = scoreGrid(scores);
+  }
+
+  function transformAragornToPartners(card) {
+    if (card.dataset.activeDeckTransformed === "true") return;
+    card.dataset.activeDeckTransformed = "true";
+    const title = card.querySelector("h3");
+    const commander = card.querySelector(".commander-line");
+    const strategy = card.querySelector(".strategy");
+    const roast = card.querySelector("blockquote");
+    const mana = card.querySelector(".mana-row");
+    const tags = card.querySelector(".tag-row");
+    const medallion = card.querySelector(".salt-medallion strong");
+    if (title) title.textContent = "Ardenn & Rograkh";
+    if (commander) commander.textContent = "Ardenn, Intrepid Archaeologist // Rograkh, Son of Rohgahh";
+    if (strategy) {
+      strategy.textContent =
+        "Boros partner Voltron: Ardenn moves the equipment pile for free while Rograkh volunteers to carry it. The idea has potential, but the deck has not yet proved itself to be a consistent win threat.";
+    }
+    if (roast) {
+      roast.textContent =
+        "Rograkh costs zero mana, which leaves Joost's entire budget available for swords.";
+    }
+    if (mana) mana.outerHTML = manaDots(["W", "R"], "Ardenn & Rograkh");
+    if (tags) {
+      tags.innerHTML = ["Voltron", "Equipment", "Partners", "Boros"]
+        .map((tag) => `<span class="tag">${tag}</span>`)
+        .join("");
+    }
+    if (medallion) medallion.textContent = "5/10";
+    updateScoreCard(card, {
+      oppressiveness: 3,
+      winThreat: 4,
+      funToFace: 7,
+      tablePanic: 4,
+      turnCrimes: 3,
+      podLore: 4,
+    });
+  }
+
+  function enhanceActiveDecks() {
+    const gallery = document.querySelector('[aria-label="Commander deck gallery"]');
+    if (!gallery) return;
+
+    gallery.querySelectorAll(".deck-card").forEach((card) => {
+      const title = cleanText(card.querySelector("h3")?.textContent || "");
+      if (title === "Aragorn, the Uniter") transformAragornToPartners(card);
+      if (title === "Ashling Flame Dancer") card.classList.add("is-archived-source");
+      if (title === "Witherbloom, the Balancer" && card.dataset.commanderArtFixed !== "true") {
+        card.dataset.commanderArtFixed = "true";
+        const commander = card.querySelector(".commander-line");
+        if (commander) commander.textContent = "Witherbloom, the Balancer";
+        loadCommanderImage("Witherbloom, the Balancer").then((imageUrl) => {
+          const image = card.querySelector(".deck-art-shell > img");
+          if (imageUrl && image && card.isConnected) {
+            image.src = imageUrl;
+            image.alt = "Witherbloom, the Balancer card art";
+          }
+        });
+      }
+    });
+
+    if (!gallery.querySelector('[data-custom-deck="Hakbal of the Surging Soul"]')) {
+      gallery.insertAdjacentHTML(
+        "beforeend",
+        customDeckCard(
+          {
+            owner: "Joost",
+            deckName: "Hakbal of the Surging Soul",
+            commander: "Hakbal of the Surging Soul",
+            colors: ["G", "U"],
+            note:
+              "A heavily upgraded Merfolk precon with excellent synergy and a very high ceiling. It is not oppressive, but leaving it alone lets the board become frighteningly large very quickly—and all that explore bookkeeping can make the turns run long.",
+            roast:
+              "Fun to face right up until every Merfolk explores and Joost begins a small administrative procedure.",
+            tags: ["Merfolk", "Counters", "Explore", "Precon Upgrade"],
+            salt: 7,
+            scores: {
+              oppressiveness: 4,
+              winThreat: 8,
+              funToFace: 8,
+              tablePanic: 8,
+              turnCrimes: 8,
+              podLore: 6,
+            },
+          },
+          false
+        )
+      );
+    }
+    hydrateCustomCardImages(gallery);
+
+    document.querySelectorAll("article strong").forEach((label) => {
+      if (cleanText(label.textContent) === "Aragorn, the Uniter") {
+        label.textContent = "Ardenn & Rograkh";
+      }
+    });
+  }
+
   function escapeHtml(value) {
     return String(value)
       .replace(/&/g, "&amp;")
@@ -553,7 +930,10 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
 
   function topCount(counts) {
     const entries = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-    return entries[0] || null;
+    if (!entries.length) return null;
+    const topValue = entries[0][1];
+    const leaders = entries.filter(([, count]) => count === topValue).map(([name]) => name);
+    return [leaders.join(" / "), topValue];
   }
 
   function entryGames(entry) {
@@ -563,6 +943,7 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
           number: game.number || index + 1,
           winner: String(game.winner || "").trim(),
           deck: String(game.deck || game.winningDeck || "").trim(),
+          participants: Array.isArray(game.participants) ? game.participants.map(String) : null,
         }))
         .filter((game) => game.winner || game.deck);
     }
@@ -585,6 +966,19 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     if (games.length === 1) return sorted[0][0];
     if (sorted[0][1] > 1 && sorted[0][1] > (sorted[1]?.[1] || 0)) return sorted[0][0];
     return "";
+  }
+
+  function gamesPlayedBy(entries, name) {
+    return entries.reduce(
+      (total, entry) =>
+        total +
+        entryGames(entry).filter((game) =>
+          game.participants
+            ? game.participants.includes(name)
+            : (entry.participants || []).includes(name)
+        ).length,
+      0
+    );
   }
 
   function nightWinner(entry) {
@@ -642,11 +1036,7 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     const playerRows = playerNames
       .map((name) => {
         const played = entries.filter((entry) => (entry.participants || []).includes(name)).length;
-        const gamesPlayed = entries.reduce(
-          (total, entry) =>
-            (entry.participants || []).includes(name) ? total + entryGames(entry).length : total,
-          0
-        );
+        const gamesPlayed = gamesPlayedBy(entries, name);
         const gameWins = gameWinnerCounts[name] || 0;
         const nightWins = nightWinnerCounts[name] || 0;
         const rate = gamesPlayed ? `${Math.round((gameWins / gamesPlayed) * 100)}%` : "0%";
@@ -670,11 +1060,7 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     const winShareRows =
       playerNames
         .map((name) => {
-          const gamesPlayed = entries.reduce(
-            (total, entry) =>
-              (entry.participants || []).includes(name) ? total + entryGames(entry).length : total,
-            0
-          );
+          const gamesPlayed = gamesPlayedBy(entries, name);
           const gameWins = gameWinnerCounts[name] || 0;
           const percentage = gamesPlayed ? Math.round((gameWins / gamesPlayed) * 100) : 0;
           return { name, gameWins, percentage };
@@ -902,6 +1288,7 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     nav.querySelectorAll("button").forEach((button) => button.classList.remove("active"));
     const button = nav.querySelector("[data-game-night-tab]");
     if (button) button.classList.add("active");
+    container.classList.remove("archive-mode");
     container.classList.add("game-night-mode");
     renderGameNightPanel();
   }
@@ -911,6 +1298,52 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     const button = document.querySelector("[data-game-night-tab]");
     if (button) button.classList.remove("active");
     if (container) container.classList.remove("game-night-mode");
+  }
+
+  function renderArchivePanel() {
+    const container = document.querySelector(".tab-content");
+    if (!container) return;
+    let panel = container.querySelector(".archive-panel");
+    if (!panel) {
+      panel = document.createElement("div");
+      panel.className = "archive-panel";
+      container.appendChild(panel);
+    }
+    panel.innerHTML = `
+      <section class="section-heading">
+        <p class="eyebrow">Retired Deck Registry</p>
+        <h2>Archived decks</h2>
+        <p>Former commanders kept on record after leaving the active rotation.</p>
+      </section>
+      <section class="archive-summary" aria-label="Archive summary">
+        <strong>${ARCHIVED_DECKS.length}</strong>
+        <span>retired decks across ${new Set(ARCHIVED_DECKS.map((deck) => deck.owner)).size} players</span>
+      </section>
+      <section class="deck-grid archive-grid" aria-label="Archived commander deck gallery">
+        ${ARCHIVED_DECKS.map((deck) => customDeckCard(deck, true)).join("")}
+      </section>
+    `;
+    hydrateCustomCardImages(panel);
+    if (editMode) enableTextEditing();
+  }
+
+  function showArchiveTab() {
+    const nav = document.querySelector(".tab-nav");
+    const container = document.querySelector(".tab-content");
+    if (!nav || !container) return;
+    nav.querySelectorAll("button").forEach((button) => button.classList.remove("active"));
+    const button = nav.querySelector("[data-archive-tab]");
+    if (button) button.classList.add("active");
+    container.classList.remove("game-night-mode");
+    container.classList.add("archive-mode");
+    renderArchivePanel();
+  }
+
+  function hideArchiveTab() {
+    const container = document.querySelector(".tab-content");
+    const button = document.querySelector("[data-archive-tab]");
+    if (button) button.classList.remove("active");
+    if (container) container.classList.remove("archive-mode");
   }
 
   function ensureGameNightTab() {
@@ -926,6 +1359,20 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     } else {
       nav.appendChild(button);
     }
+  }
+
+  function ensureArchiveTab() {
+    const nav = document.querySelector(".tab-nav");
+    if (!nav || nav.querySelector("[data-archive-tab]")) return;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.archiveTab = "true";
+    button.textContent = "Archived";
+    const statisticsButton = Array.from(nav.querySelectorAll("button")).find((item) =>
+      cleanText(item.textContent).includes("Statistics")
+    );
+    if (statisticsButton) nav.insertBefore(button, statisticsButton);
+    else nav.appendChild(button);
   }
 
   function handleGameNightSubmit(event) {
@@ -1013,6 +1460,10 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
         showGameNightTab();
         return;
       }
+      if (target.matches("[data-archive-tab]")) {
+        showArchiveTab();
+        return;
+      }
       if (target.matches("[data-delete-log]")) {
         deleteGameNight(target.getAttribute("data-delete-log"));
         return;
@@ -1022,8 +1473,13 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
         if (form) addGameRow(form);
         return;
       }
-      if (target.closest(".tab-nav button") && !target.closest("[data-game-night-tab]")) {
+      if (
+        target.closest(".tab-nav button") &&
+        !target.closest("[data-game-night-tab]") &&
+        !target.closest("[data-archive-tab]")
+      ) {
         hideGameNightTab();
+        hideArchiveTab();
       }
     });
 
@@ -1050,6 +1506,8 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       window.setTimeout(() => {
         observerQueued = false;
         ensureGameNightTab();
+        ensureArchiveTab();
+        enhanceActiveDecks();
         enhancePartnerCommanders();
         applyTextEdits();
         if (editMode) enableTextEditing();
@@ -1062,6 +1520,8 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     waitForApp((app) => {
       createEditControls();
       ensureGameNightTab();
+      ensureArchiveTab();
+      enhanceActiveDecks();
       enhancePartnerCommanders();
       applyTextEdits();
       installListeners();
