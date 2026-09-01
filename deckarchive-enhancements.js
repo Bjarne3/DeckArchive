@@ -302,15 +302,18 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
         { name: "Pir, Imaginative Rascal", shortName: "Pir" },
       ],
     },
-    {
-      deckName: "Ardenn & Rograkh",
-      commanders: [
-        { name: "Ardenn, Intrepid Archaeologist", shortName: "Ardenn" },
-        { name: "Rograkh, Son of Rohgahh", shortName: "Rograkh" },
-      ],
-    },
   ];
   const ARCHIVED_DECKS = [
+    {
+      owner: "Joost",
+      deckName: "Ardenn & Rograkh",
+      commander: "Ardenn, Intrepid Archaeologist // Rograkh, Son of Rohgahh",
+      colors: ["W", "R"],
+      note:
+        "Boros partner Voltron: Ardenn moved the equipment pile around for free while Rograkh carried it into combat. Retired once Joost tore the shell down to build a new Boros equipment deck.",
+      tags: ["Voltron", "Equipment", "Partners", "Boros"],
+      salt: 5,
+    },
     {
       owner: "Joost",
       deckName: "Aragorn, the Uniter",
@@ -767,15 +770,18 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       .join("")}</div>`;
   }
 
+  function saltRatingLabel(salt) {
+    return salt >= 9
+      ? "Kill them first"
+      : salt >= 7
+        ? "Powerful but manageable"
+        : salt >= 5
+          ? "Respectable menace"
+          : "Mostly fine";
+  }
+
   function customDeckCard(deck, archived) {
-    const saltLabel =
-      deck.salt >= 9
-        ? "Kill them first"
-        : deck.salt >= 7
-          ? "Powerful but manageable"
-          : deck.salt >= 5
-            ? "Respectable menace"
-            : "Mostly fine";
+    const saltLabel = saltRatingLabel(deck.salt);
     const scores = deck.scores || {
       oppressiveness: Math.max(2, deck.salt - 2),
       winThreat: deck.salt,
@@ -839,7 +845,7 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     if (grid) grid.outerHTML = scoreGrid(scores);
   }
 
-  function transformAragornToPartners(card) {
+  function transformAragornSlotToPendingDeck(card) {
     if (card.dataset.activeDeckTransformed === "true") return;
     card.dataset.activeDeckTransformed = "true";
     const title = card.querySelector("h3");
@@ -849,40 +855,233 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     const mana = card.querySelector(".mana-row");
     const tags = card.querySelector(".tag-row");
     const medallion = card.querySelector(".salt-medallion strong");
-    if (title) title.textContent = "Ardenn & Rograkh";
-    if (commander) commander.textContent = "Ardenn, Intrepid Archaeologist // Rograkh, Son of Rohgahh";
+    if (title) title.textContent = "Joost's New Boros Deck";
+    if (commander) commander.textContent = "Commander TBD";
     if (strategy) {
       strategy.textContent =
-        "Boros partner Voltron: Ardenn moves the equipment pile for free while Rograkh volunteers to carry it. The idea has potential, but the deck has not yet proved itself to be a consistent win threat.";
+        "Ardenn & Rograkh has been archived. Joost tore the shell down to build a new Boros equipment deck—commander, decklist, and salt rating are all still TBD until he settles on one.";
     }
     if (roast) {
-      roast.textContent =
-        "Rograkh costs zero mana, which leaves Joost's entire budget available for swords.";
+      roast.textContent = "The only confirmed threat level so far is Joost's confidence.";
     }
-    if (mana) mana.outerHTML = manaDots(["W", "R"], "Ardenn & Rograkh");
+    if (mana) mana.outerHTML = manaDots(["W", "R"], "Joost's New Boros Deck");
     if (tags) {
-      tags.innerHTML = ["Voltron", "Equipment", "Partners", "Boros"]
+      tags.innerHTML = ["Equipment", "Boros", "TBD"]
         .map((tag) => `<span class="tag">${tag}</span>`)
         .join("");
     }
-    if (medallion) medallion.textContent = "5/10";
-    updateScoreCard(card, {
-      oppressiveness: 3,
-      winThreat: 4,
-      funToFace: 7,
-      tablePanic: 4,
-      turnCrimes: 3,
-      podLore: 4,
-    });
+    if (medallion) medallion.textContent = "TBD";
+    updateScoreCard(card, {});
+  }
+
+  const CUSTOM_SCORE_KEY_ALIASES = {
+    tablePanicLevel: "tablePanic",
+    turnLengthCrimes: "turnCrimes",
+  };
+
+  const SCORE_FIELD_LABELS = {
+    oppressiveness: "Oppressiveness",
+    winThreat: "Win Threat",
+    funToFace: "Fun to Face",
+    themeFlavor: "Theme / Flavor",
+    chaosUnpredictability: "Chaos",
+    comebackPotential: "Comeback",
+    tablePanicLevel: "Table Panic",
+    turnLengthCrimes: "Turn Crimes",
+    podLore: "Pod Lore",
+  };
+
+  const CUSTOM_ACTIVE_DECKS = [
+    {
+      owner: "Huub",
+      deckName: "Meren of Clan Nel Toth",
+      commander: "Meren of Clan Nel Toth",
+      colors: ["B", "G"],
+      note:
+        "Golgari graveyard-value deck built around Meren's experience-counter engine: creatures obligingly die, come back at end step, and repeat the process while the graveyard fills up with things nobody asked to see twice. Debuted 12 August and still finding its legs—the loop is there, but it has not yet strung together a real closing threat.",
+      roast:
+        "Every creature on Huub's side has died at least once, and most of them are getting used to it.",
+      tags: ["Graveyard", "Reanimator", "Golgari", "Value"],
+      salt: 6,
+      scores: {
+        oppressiveness: 4,
+        winThreat: 6,
+        funToFace: 8,
+        themeFlavor: 8,
+        chaosUnpredictability: 6,
+        comebackPotential: 5,
+        tablePanic: 5,
+        turnCrimes: 3,
+        podLore: 2,
+      },
+    },
+    {
+      owner: "Joost",
+      deckName: "Hakbal of the Surging Soul",
+      commander: "Hakbal of the Surging Soul",
+      colors: ["G", "U"],
+      note:
+        "A heavily upgraded Merfolk precon with excellent synergy and a very high ceiling. It is not oppressive, but leaving it alone lets the board become frighteningly large very quickly—and all that explore bookkeeping can make the turns run long.",
+      roast:
+        "Fun to face right up until every Merfolk explores and Joost begins a small administrative procedure.",
+      tags: ["Merfolk", "Counters", "Explore", "Precon Upgrade"],
+      salt: 7,
+      scores: {
+        oppressiveness: 4,
+        winThreat: 8,
+        funToFace: 8,
+        tablePanic: 8,
+        turnCrimes: 8,
+        podLore: 6,
+      },
+    },
+  ];
+
+  function customScoreValue(deck, key) {
+    if (!deck.scores) return undefined;
+    const aliasedKey = CUSTOM_SCORE_KEY_ALIASES[key] || key;
+    return deck.scores[aliasedKey];
+  }
+
+  function customDeckMatchesFilters(deck, filters) {
+    if (!filters) return true;
+    const haystack = [
+      deck.deckName,
+      deck.commander,
+      deck.owner,
+      deck.note,
+      deck.roast,
+      saltRatingLabel(deck.salt),
+      ...(deck.tags || []),
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    if (filters.query && !haystack.includes(filters.query.toLowerCase().trim())) return false;
+    if (filters.owner !== "all" && deck.owner !== filters.owner) return false;
+    if (filters.tag !== "all" && !(deck.tags || []).includes(filters.tag)) return false;
+    if (deck.salt < filters.saltMin || deck.salt > filters.saltMax) return false;
+    if (filters.scoreKey !== "any") {
+      const value = customScoreValue(deck, filters.scoreKey);
+      if (value === undefined || value === null || value < filters.scoreMin || value > filters.scoreMax) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function readGalleryControls() {
+    const panel = document.querySelector(".controls-panel");
+    if (!panel) return null;
+    const selects = Array.from(panel.querySelectorAll("select"));
+    const numberInputs = Array.from(panel.querySelectorAll('input[type="number"]'));
+    const [ownerSelect, tagSelect, scoreKeySelect] = selects;
+    const [saltMinInput, saltMaxInput, scoreMinInput, scoreMaxInput] = numberInputs;
+    return {
+      query: panel.querySelector('input[type="search"]')?.value || "",
+      owner: ownerSelect ? ownerSelect.value : "all",
+      tag: tagSelect ? tagSelect.value : "all",
+      saltMin: saltMinInput ? Number(saltMinInput.value) : 1,
+      saltMax: saltMaxInput ? Number(saltMaxInput.value) : 10,
+      scoreKey: scoreKeySelect ? scoreKeySelect.value : "any",
+      scoreMin: scoreMinInput ? Number(scoreMinInput.value) : 1,
+      scoreMax: scoreMaxInput ? Number(scoreMaxInput.value) : 10,
+    };
+  }
+
+  function readGallerySort() {
+    const select = document.querySelector(".sort-row select");
+    return select ? select.value : "saltRating-asc";
+  }
+
+  function nativeCardSortValue(card, sortField) {
+    if (sortField === "deckName") return cleanText(card.querySelector("h3")?.textContent || "");
+    if (sortField === "owner") return cleanText(card.querySelector(".eyebrow")?.textContent || "");
+    if (sortField === "commander") return cleanText(card.querySelector(".commander-line")?.textContent || "");
+    if (sortField === "saltRating") {
+      const value = parseFloat(card.querySelector(".salt-medallion strong")?.textContent || "");
+      return Number.isNaN(value) ? null : value;
+    }
+    const label = SCORE_FIELD_LABELS[sortField];
+    if (!label) return null;
+    const pip = Array.from(card.querySelectorAll(".score-pip")).find(
+      (item) => cleanText(item.querySelector("span")?.textContent || "") === label
+    );
+    if (!pip) return null;
+    const value = parseFloat(pip.querySelector("strong")?.textContent || "");
+    return Number.isNaN(value) ? null : value;
+  }
+
+  function customDeckSortValue(deck, sortField) {
+    if (sortField === "deckName") return deck.deckName;
+    if (sortField === "owner") return deck.owner;
+    if (sortField === "commander") return deck.commander;
+    if (sortField === "saltRating") return deck.salt;
+    return customScoreValue(deck, sortField);
+  }
+
+  function placeCustomDeckCard(gallery, deck) {
+    const filters = readGalleryControls();
+    const existing = Array.from(gallery.querySelectorAll("[data-custom-deck]")).find(
+      (card) => card.getAttribute("data-custom-deck") === deck.deckName
+    );
+
+    if (!customDeckMatchesFilters(deck, filters)) {
+      if (existing) existing.remove();
+      return;
+    }
+
+    const [sortField, direction] = readGallerySort().split("-");
+    const nativeCards = Array.from(gallery.querySelectorAll(".deck-card:not([data-custom-deck])"));
+    let insertBeforeNode = null;
+    const ourValue = customDeckSortValue(deck, sortField);
+    if (ourValue !== undefined && ourValue !== null && nativeCards.length) {
+      insertBeforeNode =
+        nativeCards.find((card) => {
+          const nativeValue = nativeCardSortValue(card, sortField);
+          if (nativeValue === null || nativeValue === undefined) return false;
+          const cmp =
+            typeof ourValue === "string" ? ourValue.localeCompare(nativeValue) : ourValue - nativeValue;
+          return direction === "desc" ? cmp > 0 : cmp < 0;
+        }) || null;
+    }
+
+    if (existing) {
+      if (insertBeforeNode) {
+        if (existing.nextSibling !== insertBeforeNode) gallery.insertBefore(existing, insertBeforeNode);
+      } else if (existing !== gallery.lastElementChild) {
+        gallery.appendChild(existing);
+      }
+      return;
+    }
+
+    const template = document.createElement("template");
+    template.innerHTML = customDeckCard(deck, false).trim();
+    const node = template.content.firstElementChild;
+    if (!node) return;
+    if (insertBeforeNode) gallery.insertBefore(node, insertBeforeNode);
+    else gallery.appendChild(node);
+  }
+
+  function patchGalleryVisibleCount(gallery) {
+    const countParagraph = document.querySelector(".sort-row p");
+    const strongs = countParagraph ? countParagraph.querySelectorAll("strong") : [];
+    if (strongs.length !== 2) return;
+    if (!strongs[1].dataset.nativeTotal) strongs[1].dataset.nativeTotal = strongs[1].textContent;
+    const nativeTotal = Number(strongs[1].dataset.nativeTotal) || 0;
+    const nativeShown = gallery.querySelectorAll(".deck-card:not([data-custom-deck])").length;
+    const customShown = gallery.querySelectorAll("[data-custom-deck]").length;
+    strongs[0].textContent = String(nativeShown + customShown);
+    strongs[1].textContent = String(nativeTotal + CUSTOM_ACTIVE_DECKS.length);
   }
 
   function enhanceActiveDecks() {
     const gallery = document.querySelector('[aria-label="Commander deck gallery"]');
     if (!gallery) return;
 
-    gallery.querySelectorAll(".deck-card").forEach((card) => {
+    gallery.querySelectorAll(".deck-card:not([data-custom-deck])").forEach((card) => {
       const title = cleanText(card.querySelector("h3")?.textContent || "");
-      if (title === "Aragorn, the Uniter") transformAragornToPartners(card);
+      if (title === "Aragorn, the Uniter") transformAragornSlotToPendingDeck(card);
       if (title === "Ashling Flame Dancer") card.classList.add("is-archived-source");
       if (title === "Witherbloom, the Balancer" && card.dataset.commanderArtFixed !== "true") {
         card.dataset.commanderArtFixed = "true";
@@ -898,71 +1097,13 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       }
     });
 
-    if (!gallery.querySelector('[data-custom-deck="Meren of Clan Nel Toth"]')) {
-      gallery.insertAdjacentHTML(
-        "beforeend",
-        customDeckCard(
-          {
-            owner: "Huub",
-            deckName: "Meren of Clan Nel Toth",
-            commander: "Meren of Clan Nel Toth",
-            colors: ["B", "G"],
-            note:
-              "Golgari graveyard-value deck built around Meren's experience-counter engine: creatures obligingly die, come back at end step, and repeat the process while the graveyard fills up with things nobody asked to see twice. Debuted 12 August and still finding its legs—the loop is there, but it has not yet strung together a real closing threat.",
-            roast:
-              "Every creature on Huub's side has died at least once, and most of them are getting used to it.",
-            tags: ["Graveyard", "Reanimator", "Golgari", "Value"],
-            salt: 6,
-            scores: {
-              oppressiveness: 4,
-              winThreat: 6,
-              funToFace: 8,
-              themeFlavor: 8,
-              chaosUnpredictability: 6,
-              comebackPotential: 5,
-              tablePanic: 5,
-              turnCrimes: 3,
-              podLore: 2,
-            },
-          },
-          false
-        )
-      );
-    }
-
-    if (!gallery.querySelector('[data-custom-deck="Hakbal of the Surging Soul"]')) {
-      gallery.insertAdjacentHTML(
-        "beforeend",
-        customDeckCard(
-          {
-            owner: "Joost",
-            deckName: "Hakbal of the Surging Soul",
-            commander: "Hakbal of the Surging Soul",
-            colors: ["G", "U"],
-            note:
-              "A heavily upgraded Merfolk precon with excellent synergy and a very high ceiling. It is not oppressive, but leaving it alone lets the board become frighteningly large very quickly—and all that explore bookkeeping can make the turns run long.",
-            roast:
-              "Fun to face right up until every Merfolk explores and Joost begins a small administrative procedure.",
-            tags: ["Merfolk", "Counters", "Explore", "Precon Upgrade"],
-            salt: 7,
-            scores: {
-              oppressiveness: 4,
-              winThreat: 8,
-              funToFace: 8,
-              tablePanic: 8,
-              turnCrimes: 8,
-              podLore: 6,
-            },
-          },
-          false
-        )
-      );
-    }
+    CUSTOM_ACTIVE_DECKS.forEach((deck) => placeCustomDeckCard(gallery, deck));
+    patchGalleryVisibleCount(gallery);
     hydrateCustomCardImages(gallery);
 
     document.querySelectorAll("article strong").forEach((label) => {
       if (cleanText(label.textContent) === "Aragorn, the Uniter") {
-        label.textContent = "Ardenn & Rograkh";
+        label.textContent = "Joost's New Boros Deck";
       }
     });
   }
