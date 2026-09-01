@@ -149,12 +149,12 @@ Huub closed the night on Chishiro, the Shattered Blade, Flinging Joost outright 
     {
       id: "2026-08-12-meren-debut",
       date: "2026-08-12",
-      nightWinner: "Huub",
+      nightWinner: "Flo",
       games: [
         {
           number: 1,
-          winner: "Huub",
-          deck: "Meren of Clan Nel Toth",
+          winner: "Flo",
+          deck: "Escape deck",
           participants: ["Bjarne", "Joost", "Huub", "Flo"],
         },
         {
@@ -177,13 +177,13 @@ Huub closed the night on Chishiro, the Shattered Blade, Flinging Joost outright 
         },
       ],
       description:
-        `Flo sat in for Lenny, and Huub used the night to debut Meren of Clan Nel Toth—fresh off the sleeve and still working out the experience-counter loop. Bjarne opened on Lord of Pain, Joost brought Council of Four, and Flo ran something nobody could reconstruct the next morning. The recap for this one exists only as a garbled voice memo Bjarne left himself well after the fact, so take the details with the appropriate grain of salt: as best anyone can tell, Huub took it down.
+        `Flo sat in for Lenny, and Huub used the night to debut Meren of Clan Nel Toth—fresh off the sleeve and still working out the experience-counter loop. Bjarne opened on Lord of Pain, Joost brought Council of Four, and Flo ran something nobody could reconstruct the next morning. The recap for this one exists only as a garbled voice memo Joost left himself well after the fact, so take the details with the appropriate grain of salt: as best anyone can tell, Flo took it down.
 
-Second game out, Meren was still shaking off new-deck jitters and, by all accounts, did not do much. Bjarne swapped to Witherbloom, the Balancer and reports mostly staying out of the way. Joost's mono-black pile and Flo's mystery deck rounded out the table, and the win—per Bjarne's best recollection, which he rates as a "complete guess"—went to Flo.
+Second game out, Meren was still shaking off new-deck jitters and, by all accounts, did not do much. Bjarne swapped to Witherbloom, the Balancer and reports mostly staying out of the way. Joost's mono-black pile rounded out the table, and the win—per Joost's own recollection, which he rates as a "complete guess"—went to Flo again.
 
-Huub retired Meren for the night in favor of Chishiro, the Shattered Blade, his Gruul Voltron deck, while Bjarne moved into the Muldrotha / Gyruda graveyard pile. Joost's Karlov of the Ghost Council appears to have closed this one out; Bjarne can only confirm that something of his got removed at some point and that the win was not his.
+Huub retired Meren for the night in favor of Chishiro, the Shattered Blade, his Gruul Voltron deck, while Bjarne moved into the Muldrotha / Gyruda graveyard pile. Joost's Karlov of the Ghost Council appears to have closed this one out; the memo could only confirm that something of Bjarne's got removed at some point, and that the win was not Bjarne's.
 
-The night closed with Joost on Hakbal of the Surging Soul, Huub back on Chishiro, Flo running a deck that generated mana off combat damage, and Bjarne on Kadena playing the control seat: an early Tatyova and a hyperactive Goldite Selkie turned every combat into a five-to-eight-card refill, and a suitably "fucking overpowered" Cyclonic Rift finally went off late. None of it was enough. Huub closed the night exactly as he had apparently opened it, riding Chishiro's commander damage to a second win while Joost's Merfolk fell just short.`,
+The night closed with Joost on Hakbal of the Surging Soul, Huub back on Chishiro, Flo running a deck that generated mana off combat damage, and Bjarne on Kadena playing the control seat: an early Tatyova and a hyperactive Goldite Selkie turned every combat into a five-to-eight-card refill, and a suitably "fucking overpowered" Cyclonic Rift finally went off late. None of it was enough. Huub closed the night with a second win, Chishiro's commander damage getting there just ahead of Joost's Merfolk.`,
       participants: ["Bjarne", "Joost", "Huub", "Flo"],
       tags: ["Guest win", "Salt spike", "Sluggish"],
     },
@@ -396,7 +396,7 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       salt: 7,
     },
   ];
-  const PARTNER_IMAGE_CACHE_KEY = "deckarchive:partner-commander-images:v1";
+  const PARTNER_IMAGE_CACHE_KEY = "deckarchive:partner-commander-images:v2";
 
   let editMode = false;
   let observerQueued = false;
