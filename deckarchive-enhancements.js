@@ -106,6 +106,88 @@
   ];
   const GAME_NIGHT_SEED = [
     {
+      id: "2026-08-19-topdecked-hatred",
+      date: "2026-08-19",
+      nightWinner: "Lenny",
+      games: [
+        {
+          number: 1,
+          winner: "Lenny",
+          deck: "Teysa Karlov",
+          participants: ["Bjarne", "Joost", "Huub", "Lenny"],
+        },
+        {
+          number: 2,
+          winner: "Lenny",
+          deck: "Eshki",
+          participants: ["Bjarne", "Joost", "Huub", "Lenny"],
+        },
+        {
+          number: 3,
+          winner: "Bjarne",
+          deck: "Muldrotha, the Gravetide",
+          participants: ["Bjarne", "Joost", "Huub", "Lenny"],
+        },
+        {
+          number: 4,
+          winner: "Huub",
+          deck: "Chishiro, the Shattered Blade",
+          participants: ["Bjarne", "Joost", "Huub", "Lenny"],
+        },
+      ],
+      description:
+        `Huub brought Meren of Clan Nel Toth back out and Bjarne opened on Lord of Pain, while Lenny's Teysa Karlov and Joost's Ruby, Daring Tracker rounded out the table. The game's defining moment was Huub firing off removal despite what everyone had assumed was a standing bondje—an alliance that turned out to be more of a suggestion. It did not stop Lenny, who took the game anyway.
+
+Game two was a slog: Bjarne's Muldrotha ground away, Joost's Council of Four quietly assembled its engine, and Huub's Dragonlord Dromoka missed more land drops than it made turns. Lenny spent the game loudly wondering who the real threat at the table was, apparently unable to recognize himself in the mirror, while somehow also failing to clock how far ahead Joost's board had gotten. None of that self-awareness gap stopped him from winning again.
+
+Game three was the night's centerpiece. Huub, on Meren again, was the first to go down to Joost's Aetherflux Reservoir—a kill Joost would later second-guess, since he had the shot to finish Lenny with the same trigger and let it pass. Bjarne, on Witherbloom, closed out Lenny instead, of all things, with a squirrel carrying forestwalk. That left a four-turn standoff between Joost and Bjarne, decided only when Joost topdecked Hatred at one life and still could not close it out. Bjarne took the game.
+
+Huub closed the night on Chishiro, the Shattered Blade, Flinging Joost outright for the kill. Bjarne was on Raffine, Scheming Seer, Joost brought Jon Irenicus back to the table, and Lenny ran Toph, Hardheaded Student. Nobody at the table had rated Huub's threat assessment highly going in; Chishiro won anyway.`,
+      participants: ["Bjarne", "Joost", "Huub", "Lenny"],
+      tags: ["Sluggish", "Close finish", "Combo scare"],
+    },
+    {
+      id: "2026-08-12-meren-debut",
+      date: "2026-08-12",
+      nightWinner: "Huub",
+      games: [
+        {
+          number: 1,
+          winner: "Huub",
+          deck: "Meren of Clan Nel Toth",
+          participants: ["Bjarne", "Joost", "Huub", "Flo"],
+        },
+        {
+          number: 2,
+          winner: "Flo",
+          deck: "Escape deck",
+          participants: ["Bjarne", "Joost", "Huub", "Flo"],
+        },
+        {
+          number: 3,
+          winner: "Joost",
+          deck: "Karlov of the Ghost Council",
+          participants: ["Bjarne", "Joost", "Huub", "Flo"],
+        },
+        {
+          number: 4,
+          winner: "Huub",
+          deck: "Chishiro, the Shattered Blade",
+          participants: ["Bjarne", "Joost", "Huub", "Flo"],
+        },
+      ],
+      description:
+        `Flo sat in for Lenny, and Huub used the night to debut Meren of Clan Nel Toth—fresh off the sleeve and still working out the experience-counter loop. Bjarne opened on Lord of Pain, Joost brought Council of Four, and Flo ran something nobody could reconstruct the next morning. The recap for this one exists only as a garbled voice memo Bjarne left himself well after the fact, so take the details with the appropriate grain of salt: as best anyone can tell, Huub took it down.
+
+Second game out, Meren was still shaking off new-deck jitters and, by all accounts, did not do much. Bjarne swapped to Witherbloom, the Balancer and reports mostly staying out of the way. Joost's mono-black pile and Flo's mystery deck rounded out the table, and the win—per Bjarne's best recollection, which he rates as a "complete guess"—went to Flo.
+
+Huub retired Meren for the night in favor of Chishiro, the Shattered Blade, his Gruul Voltron deck, while Bjarne moved into the Muldrotha / Gyruda graveyard pile. Joost's Karlov of the Ghost Council appears to have closed this one out; Bjarne can only confirm that something of his got removed at some point and that the win was not his.
+
+The night closed with Joost on Hakbal of the Surging Soul, Huub back on Chishiro, Flo running a deck that generated mana off combat damage, and Bjarne on Kadena playing the control seat: an early Tatyova and a hyperactive Goldite Selkie turned every combat into a five-to-eight-card refill, and a suitably "fucking overpowered" Cyclonic Rift finally went off late. None of it was enough. Huub closed the night exactly as he had apparently opened it, riding Chishiro's commander damage to a second win while Joost's Merfolk fell just short.`,
+      participants: ["Bjarne", "Joost", "Huub", "Flo"],
+      tags: ["Guest win", "Salt spike", "Sluggish"],
+    },
+    {
       id: "2026-07-28-no-takesies-backsies",
       date: "2026-07-28",
       nightWinner: "Bjarne",
@@ -666,10 +748,13 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       ["Oppressiveness", scores.oppressiveness],
       ["Win Threat", scores.winThreat],
       ["Fun to Face", scores.funToFace],
+      ["Theme / Flavor", scores.themeFlavor],
+      ["Chaos", scores.chaosUnpredictability],
+      ["Comeback", scores.comebackPotential],
       ["Table Panic", scores.tablePanic],
       ["Turn Crimes", scores.turnCrimes],
       ["Pod Lore", scores.podLore],
-    ];
+    ].filter(([, score]) => score !== undefined && score !== null);
     return `<div class="score-grid compact">${visibleScores
       .map(
         ([label, score]) => `
@@ -812,6 +897,38 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
         });
       }
     });
+
+    if (!gallery.querySelector('[data-custom-deck="Meren of Clan Nel Toth"]')) {
+      gallery.insertAdjacentHTML(
+        "beforeend",
+        customDeckCard(
+          {
+            owner: "Huub",
+            deckName: "Meren of Clan Nel Toth",
+            commander: "Meren of Clan Nel Toth",
+            colors: ["B", "G"],
+            note:
+              "Golgari graveyard-value deck built around Meren's experience-counter engine: creatures obligingly die, come back at end step, and repeat the process while the graveyard fills up with things nobody asked to see twice. Debuted 12 August and still finding its legs—the loop is there, but it has not yet strung together a real closing threat.",
+            roast:
+              "Every creature on Huub's side has died at least once, and most of them are getting used to it.",
+            tags: ["Graveyard", "Reanimator", "Golgari", "Value"],
+            salt: 6,
+            scores: {
+              oppressiveness: 4,
+              winThreat: 6,
+              funToFace: 8,
+              themeFlavor: 8,
+              chaosUnpredictability: 6,
+              comebackPotential: 5,
+              tablePanic: 5,
+              turnCrimes: 3,
+              podLore: 2,
+            },
+          },
+          false
+        )
+      );
+    }
 
     if (!gallery.querySelector('[data-custom-deck="Hakbal of the Surging Soul"]')) {
       gallery.insertAdjacentHTML(
