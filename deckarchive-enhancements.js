@@ -106,6 +106,33 @@
   ];
   const GAME_NIGHT_SEED = [
     {
+      id: "2026-09-16-grouphug-that-wasnt",
+      date: "2026-09-16",
+      nightWinner: "Bjarne",
+      games: [
+        {
+          number: 1,
+          winner: "Bjarne",
+          deck: "Archelos, Lagoon Mystic",
+          participants: ["Bjarne", "Joost", "Huub", "Andreas"],
+        },
+        {
+          number: 2,
+          winner: "Keanu",
+          deck: "Hearthhull, the Worldseed",
+          participants: ["Bjarne", "Joost", "Huub", "Keanu"],
+        },
+      ],
+      description:
+        `Two games, two debuts, and one piece of table diplomacy that deserves its own entry in the rules. Bjarne brought out Archelos, Lagoon Mystic for the first time and presented it to the pod as a grouphug deck. It was not a grouphug deck. Nobody checked. Andreas sat down with a partner pair whose names have already left the collective memory, got stuck on three lands, and still managed to look genuinely threatening for a while—three lands' worth of threatening, which turned out to be exactly as much as it sounds. Huub ran Meren and spent the game answering everyone else's board without ever quite getting around to building his own, a strategy with an obvious flaw that only becomes apparent around turn ten. Joost debuted Melek, Reforged Researcher, his new Izzet burn deck, and appears to have left his lands at home; he was out early.
+
+That left Bjarne to win a game he had already fumbled. The cards did not come, a misplay cost him the kill on turn six, and the deck then made him sit through another six turns of grinding everyone else out of value before it would let him have it. When it finally happened it happened with 128 Scute Swarms, which is either a triumph of landfall engineering or a compelling argument for reading the table's deck descriptions more carefully.
+
+Game two was Huub's to lose, and he lost it fast. Chishiro on turn two is the kind of opener that answers the question "who should we kill first" before anyone has to ask it, and the commander damage math got alarming quickly enough that the table simply focused him off the board. Joost's Izzet deck went the same way it had in game one. Keanu took Andreas' seat with a heavily upgraded Hearthhull, the Worldseed precon and quietly assembled the actual problem: land triggers ticking Bjarne's life total down two at a time while Bjarne's rats—genuinely strong, genuinely wide—found a recursive fog waiting for them every single combat. Gray Merchant of Asphodel came down and was not enough. Then the spacecraft finished stationing, took to the air, and hit for twenty. Bjarne did not have it. Keanu finished on three life, which is the closest thing to a moral victory available at the end of a night that ended 1–1.`,
+      participants: ["Bjarne", "Joost", "Huub", "Andreas", "Keanu"],
+      tags: ["Guest win", "Close finish", "Mana issues", "Long turns"],
+    },
+    {
       id: "2026-08-19-topdecked-hatred",
       date: "2026-08-19",
       nightWinner: "Lenny",
@@ -892,6 +919,52 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
   };
 
   const CUSTOM_ACTIVE_DECKS = [
+    {
+      owner: "Bjarne",
+      deckName: "Archelos, Lagoon Mystic",
+      commander: "Archelos, Lagoon Mystic",
+      colors: ["B", "G", "U"],
+      note:
+        "Sultai landfall value deck that turns extra land drops into an engine and then into an army. Archelos' tapped/untapped symmetry break is the quiet part; the loud part is a board of Scute Swarms that doubles every time a land hits the battlefield. Debuted 16 September and marketed to the pod, with a completely straight face, as a grouphug deck.",
+      roast:
+        "Bjarne called it grouphug. The pod believed him. The pod then watched 128 Scute Swarms arrive.",
+      tags: ["Landfall", "Sultai", "Tokens", "Value"],
+      salt: 8,
+      scores: {
+        oppressiveness: 6,
+        winThreat: 8,
+        funToFace: 5,
+        themeFlavor: 8,
+        chaosUnpredictability: 4,
+        comebackPotential: 7,
+        tablePanic: 7,
+        turnCrimes: 8,
+        podLore: 9,
+      },
+    },
+    {
+      owner: "Joost",
+      deckName: "Melek, Reforged Researcher",
+      commander: "Melek, Reforged Researcher",
+      colors: ["U", "R"],
+      note:
+        "Joost's new Izzet burn shell: cheap spells, copied spells, and a Weird Detective doing forensic work on everyone's life total. High ceiling on paper, currently undermined by a mana base that has twice now failed to produce enough lands to find out what the ceiling actually is.",
+      roast:
+        "Two games, two early exits. The investigation into where Joost's lands went remains open.",
+      tags: ["Izzet", "Burn", "Spellslinger", "Copy"],
+      salt: 6,
+      scores: {
+        oppressiveness: 5,
+        winThreat: 6,
+        funToFace: 6,
+        themeFlavor: 8,
+        chaosUnpredictability: 7,
+        comebackPotential: 4,
+        tablePanic: 5,
+        turnCrimes: 5,
+        podLore: 4,
+      },
+    },
     {
       owner: "Huub",
       deckName: "Meren of Clan Nel Toth",
