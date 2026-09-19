@@ -814,12 +814,11 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     const visibleScores = [
       ["Oppressiveness", scores.oppressiveness],
       ["Win Threat", scores.winThreat],
-      ["Fun to Face", scores.funToFace],
-      ["Theme / Flavor", scores.themeFlavor],
-      ["Chaos", scores.chaosUnpredictability],
-      ["Comeback", scores.comebackPotential],
+      ["Interaction", scores.interaction],
       ["Table Panic", scores.tablePanic],
       ["Turn Crimes", scores.turnCrimes],
+      ["Politics", scores.politics],
+      ["Fun to Face", scores.funToFace],
       ["Pod Lore", scores.podLore],
     ].filter(([, score]) => score !== undefined && score !== null);
     return `<div class="score-grid compact">${visibleScores
@@ -909,33 +908,253 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     if (grid) grid.outerHTML = scoreGrid(scores);
   }
 
-  function transformAragornSlotToPendingDeck(card) {
-    if (card.dataset.activeDeckTransformed === "true") return;
-    card.dataset.activeDeckTransformed = "true";
-    const title = card.querySelector("h3");
-    const commander = card.querySelector(".commander-line");
-    const strategy = card.querySelector(".strategy");
-    const roast = card.querySelector("blockquote");
-    const mana = card.querySelector(".mana-row");
-    const tags = card.querySelector(".tag-row");
-    const medallion = card.querySelector(".salt-medallion strong");
-    if (title) title.textContent = "Joost's New Boros Deck";
-    if (commander) commander.textContent = "Commander TBD";
-    if (strategy) {
-      strategy.textContent =
-        "Ardenn & Rograkh has been archived. Joost tore the shell down to build a new Boros equipment deck—commander, decklist, and salt rating are all still TBD until he settles on one.";
+  // The native cards render the bundle's own power level and 6-category grid. Rewrite
+  // both from NATIVE_DECK_RATINGS every tick — React re-renders these nodes freely, so
+  // this must be idempotent and must not depend on reading the card's current values.
+  function applyNativeDeckRating(card, rawTitle) {
+    const rating = NATIVE_DECK_RATINGS[resolveNativeDeckTitle(rawTitle)];
+    if (!rating) return;
+    const tone = scoreTone(rating.salt);
+    // Every write below is guarded: this runs on a MutationObserver tick, so writing an
+    // unchanged value would retrigger the observer and spin.
+    const setTone = (node) => {
+      if (node.classList.contains(tone)) return;
+      node.classList.remove("danger", "medium", "calm");
+      node.classList.add(tone);
+    };
+    const setText = (node, text) => {
+      if (node && node.textContent !== text) node.textContent = text;
+    };
+    const medallion = card.querySelector(".salt-medallion");
+    if (medallion) {
+      setTone(medallion);
+      setText(medallion.querySelector("strong"), `${rating.salt}/10`);
     }
-    if (roast) {
-      roast.textContent = "The only confirmed threat level so far is Joost's confidence.";
+    const strip = card.querySelector(".salt-strip");
+    if (strip) {
+      setTone(strip);
+      setText(strip.querySelector("strong"), saltRatingLabel(rating.salt));
     }
-    if (mana) mana.outerHTML = manaDots(["W", "R"], "Joost's New Boros Deck");
-    if (tags) {
-      tags.innerHTML = ["Equipment", "Boros", "TBD"]
-        .map((tag) => `<span class="tag">${tag}</span>`)
+    if (card.dataset.salt !== String(rating.salt)) card.dataset.salt = String(rating.salt);
+    // Check the rendered pip count rather than a marker attribute: React reuses the
+    // .score-grid node across re-renders, so a data-flag survives while the children
+    // underneath it get reverted to the bundle's own 6-category grid.
+    const grid = card.querySelector(".score-grid");
+    if (grid && grid.querySelectorAll(".score-pip").length !== 8) {
+      updateScoreCard(card, rating.scores);
+    }
+  }
+
+  // "Salt rating" was renamed to "Power level" — the label lives inside the compiled
+  // bundle in a dozen places, so the wording is patched in the DOM instead.
+  const POWER_LABEL_REPLACEMENTS = [
+    [/Salt Rating/g, "Power Level"],
+    [/Salt rating/g, "Power level"],
+    [/salt rating/g, "power level"],
+    [/Saltiest decks/g, "Highest power decks"],
+    [/Average salt by owner/g, "Average power by owner"],
+    [/High salt but still weirdly fun/g, "High power but still weirdly fun"],
+    [/Fun to face vs salt rating/g, "Fun to face vs power level"],
+    [/\bsalt (\d)/g, "power $1"],
+    [/Avg salt/g, "Avg power"],
+    [/Saltiest/g, "Most powerful"],
+  ];
+
+  function renamePowerLevelLabels() {
+    const scopes = document.querySelectorAll(
+      ".salt-strip span, .sort-row label, .sort-row option, .filter-row label, .stats-dashboard h3, .stats-dashboard h4, .stats-dashboard dt, .analysis-list span, .chart-card h3, .chart-card h4, select option, label"
+    );
+    scopes.forEach((node) => {
+      const original = node.textContent;
+      let updated = original;
+      POWER_LABEL_REPLACEMENTS.forEach(([pattern, replacement]) => {
+        updated = updated.replace(pattern, replacement);
+      });
+      if (updated !== original) node.textContent = updated;
+    });
+  }
+
+  // The hero panel counts the bundle's own deck list, so it misses the custom decks and
+  // still counts the two retired natives that are hidden from the gallery.
+  function visibleActiveDeckCount(nativeTotal) {
+    return nativeTotal - HIDDEN_NATIVE_DECKS.length + CUSTOM_ACTIVE_DECKS.length;
+  }
+
+  function patchHeroDeckCount() {
+    const panel = document.querySelector(".hero-stat-panel");
+    if (!panel) return;
+    const value = panel.querySelector("strong");
+    if (!value) return;
+    if (!value.dataset.nativeTotal) value.dataset.nativeTotal = value.textContent;
+    const nativeTotal = Number(value.dataset.nativeTotal) || 0;
+    if (!nativeTotal) return;
+    const corrected = String(visibleActiveDeckCount(nativeTotal));
+    if (value.textContent !== corrected) value.textContent = corrected;
+  }
+
+  // Every rated deck currently in the active rotation, native and custom alike.
+  function allRatedDecks() {
+    const natives = Object.keys(NATIVE_DECK_RATINGS)
+      .filter((name) => !HIDDEN_NATIVE_DECKS.includes(name))
+      .map((name) => ({
+        deckName: name,
+        owner: NATIVE_DECK_RATINGS[name].owner,
+        salt: NATIVE_DECK_RATINGS[name].salt,
+        fun: NATIVE_DECK_RATINGS[name].scores.funToFace,
+        panic: NATIVE_DECK_RATINGS[name].scores.tablePanic,
+        threat: NATIVE_DECK_RATINGS[name].scores.winThreat,
+      }));
+    const customs = CUSTOM_ACTIVE_DECKS.map((deck) => ({
+      deckName: deck.deckName,
+      owner: deck.owner,
+      salt: deck.salt,
+      fun: deck.scores.funToFace,
+      panic: deck.scores.tablePanic,
+      threat: deck.scores.winThreat,
+    }));
+    return natives.concat(customs);
+  }
+
+  function average(values) {
+    if (!values.length) return 0;
+    const total = values.reduce((sum, value) => sum + value, 0);
+    return Math.round((total / values.length) * 10) / 10;
+  }
+
+  function ratingsByOwner() {
+    const byOwner = {};
+    allRatedDecks().forEach((deck) => {
+      if (!byOwner[deck.owner]) byOwner[deck.owner] = [];
+      byOwner[deck.owner].push(deck);
+    });
+    return byOwner;
+  }
+
+  // The per-owner summary cards count only the bundle's own decks and use its original
+  // power numbers, so they disagree with the cards once the overrides are applied.
+  function patchOwnerSummaryCards() {
+    const byOwner = ratingsByOwner();
+    document.querySelectorAll(".summary-card").forEach((card) => {
+      const owner = cleanText(card.querySelector(".eyebrow")?.textContent || "");
+      const decks = byOwner[owner];
+      if (!decks || !decks.length) return;
+      const heading = card.querySelector("h3");
+      const headingText = `${decks.length} ${decks.length === 1 ? "deck" : "decks"}`;
+      if (heading && heading.textContent !== headingText) heading.textContent = headingText;
+      const values = [
+        average(decks.map((deck) => deck.salt)),
+        average(decks.map((deck) => deck.fun)),
+        average(decks.map((deck) => deck.threat)),
+      ];
+      card.querySelectorAll("dl > div").forEach((row, index) => {
+        if (values[index] === undefined) return;
+        const value = row.querySelector("dd");
+        const text = `${values[index]}/10`;
+        if (value && value.textContent !== text) value.textContent = text;
+      });
+    });
+  }
+
+  // Three of the analyst notes are generated sentences quoting the bundle's own numbers.
+  // Rewrite them from the override table so they can't contradict the deck cards.
+  function patchStatsNarrative() {
+    const byOwner = ratingsByOwner();
+    const ownerAverages = Object.keys(byOwner)
+      .map((owner) => ({ owner, avg: average(byOwner[owner].map((deck) => deck.salt)) }))
+      .sort((a, b) => b.avg - a.avg);
+    const decks = allRatedDecks().slice().sort((a, b) => b.salt - a.salt || b.panic - a.panic);
+    const top = decks[0];
+    const weirdlyFun = decks
+      .filter((deck) => deck.salt >= 7 && deck.fun >= 6)
+      .slice(0, 3)
+      .map((deck) => deck.deckName);
+    if (!ownerAverages.length || !top) return;
+    document.querySelectorAll(".stats-dashboard p, .stats-dashboard li").forEach((node) => {
+      const text = node.textContent;
+      let updated = null;
+      if (/highest average (salt|power) rating/i.test(text)) {
+        updated = `${ownerAverages[0].owner}'s decks have the highest average power rating (${ownerAverages[0].avg}/10), which is probably a governance issue.`;
+      } else if (/is the (saltiest|most powerful) deck in the archive/i.test(text)) {
+        const tagline = text.includes(": ") ? text.slice(text.indexOf(": ") + 2) : "";
+        updated = `${top.deckName} is the most powerful deck in the archive at ${top.salt}/10${
+          tagline ? `: ${tagline}` : "."
+        }`;
+      } else if (/can coexist/i.test(text) && weirdlyFun.length === 3) {
+        updated = `${weirdlyFun.join(", ")} prove that high power and decent fun can coexist, which is either balance or denial.`;
+      }
+      if (updated && node.textContent !== updated) node.textContent = updated;
+    });
+  }
+
+  // The bundle builds its four "analysis list" callouts independently, so a deck that
+  // satisfies two of them (Witherbloom, Magus) gets printed twice. Rebuild all four from
+  // the override table instead, assigning each deck to exactly one list.
+  const ANALYSIS_LIST_SPECS = [
+    {
+      heading: "Probably kill on sight",
+      match: (deck) => deck.salt >= 8.5,
+      sort: (a, b) => b.salt - a.salt || b.panic - a.panic,
+    },
+    {
+      heading: "High power, low fun",
+      match: (deck) => deck.salt >= 7 && deck.fun <= 5,
+      sort: (a, b) => b.salt - a.salt || a.fun - b.fun,
+    },
+    {
+      heading: "High power but still weirdly fun",
+      match: (deck) => deck.salt >= 7 && deck.fun >= 6,
+      sort: (a, b) => b.salt - a.salt || b.fun - a.fun,
+    },
+    {
+      heading: "Chill-looking but dangerous",
+      match: (deck) => deck.fun >= 6 && deck.panic >= 6,
+      sort: (a, b) => b.panic - a.panic || b.fun - a.fun,
+    },
+  ];
+
+  function analysisListHeading(node) {
+    const heading = node.querySelector("h4");
+    return heading ? cleanText(heading.textContent) : "";
+  }
+
+  function rebuildAnalysisLists() {
+    const nodes = Array.from(document.querySelectorAll(".analysis-list"));
+    if (!nodes.length) return;
+    const pool = allRatedDecks();
+    const used = new Set();
+    ANALYSIS_LIST_SPECS.forEach((spec) => {
+      const picks = pool
+        .filter((deck) => !used.has(deck.deckName) && spec.match(deck))
+        .sort(spec.sort)
+        .slice(0, 4);
+      picks.forEach((deck) => used.add(deck.deckName));
+      const target = nodes.find((node) => {
+        const heading = analysisListHeading(node);
+        return heading === spec.heading || heading === spec.heading.replace("power", "salt");
+      });
+      if (!target) return;
+      const list = target.querySelector("ul");
+      if (!list) return;
+      const html = picks
+        .map(
+          (deck) =>
+            `<li><strong>${escapeHtml(deck.deckName)}</strong><span>${escapeHtml(
+              `${deck.owner} - power ${deck.salt}/10, fun ${deck.fun}/10, panic ${deck.panic}/10`
+            )}</span></li>`
+        )
         .join("");
-    }
-    if (medallion) medallion.textContent = "TBD";
-    updateScoreCard(card, {});
+      if (list.innerHTML !== html) list.innerHTML = html;
+    });
+  }
+
+  // Runs on every observer tick regardless of which tab is open, since the gallery-only
+  // work in enhanceActiveDecks bails out when the deck grid isn't mounted.
+  function enhanceGlobalChrome() {
+    patchHeroDeckCount();
+    patchOwnerSummaryCards();
+    rebuildAnalysisLists();
+    patchStatsNarrative();
+    renamePowerLevelLabels();
   }
 
   const CUSTOM_SCORE_KEY_ALIASES = {
@@ -946,14 +1165,64 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
   const SCORE_FIELD_LABELS = {
     oppressiveness: "Oppressiveness",
     winThreat: "Win Threat",
-    funToFace: "Fun to Face",
-    themeFlavor: "Theme / Flavor",
-    chaosUnpredictability: "Chaos",
-    comebackPotential: "Comeback",
+    interaction: "Interaction",
     tablePanicLevel: "Table Panic",
     turnLengthCrimes: "Turn Crimes",
+    politics: "Politics",
+    funToFace: "Fun to Face",
     podLore: "Pod Lore",
   };
+
+  // Native decks live in the compiled React bundle and cannot be edited at source.
+  // This table is the hand-maintained override applied over each native card on every
+  // gallery tick: the power level (formerly "salt") plus the full 8-category score set.
+  // Keys must match the card's <h3> text exactly.
+  const NATIVE_DECK_RATINGS = {
+    "Emiel the Blessed": { owner: "Huub", salt: 3, scores: { oppressiveness: 3, winThreat: 2, interaction: 4, tablePanic: 2, turnCrimes: 2, politics: 3, funToFace: 8, podLore: 7 } },
+    "Dragonlord Dromoka": { owner: "Huub", salt: 4, scores: { oppressiveness: 5, winThreat: 4, interaction: 3, tablePanic: 4, turnCrimes: 2, politics: 2, funToFace: 8, podLore: 3 } },
+    "Arcades": { owner: "Bjarne", salt: 4, scores: { oppressiveness: 2, winThreat: 5, interaction: 3, tablePanic: 2, turnCrimes: 2, politics: 4, funToFace: 4, podLore: 3 } },
+    "Auntie Ool": { owner: "Lenny", salt: 5, scores: { oppressiveness: 5, winThreat: 4, interaction: 4, tablePanic: 2, turnCrimes: 2, politics: 5, funToFace: 8, podLore: 2 } },
+    "Chishiro, the Shattered Blade": { owner: "Huub", salt: 7, scores: { oppressiveness: 2, winThreat: 6, interaction: 2, tablePanic: 6, turnCrimes: 3, politics: 2, funToFace: 8, podLore: 8 } },
+    "5 Color Turtles Precon": { owner: "Huub", salt: 5, scores: { oppressiveness: 3, winThreat: 6, interaction: 4, tablePanic: 4, turnCrimes: 7, politics: 3, funToFace: 6, podLore: 6 } },
+    "Lord of Pain": { owner: "Bjarne", salt: 6, scores: { oppressiveness: 6, winThreat: 2, interaction: 3, tablePanic: 4, turnCrimes: 2, politics: 3, funToFace: 5, podLore: 6 } },
+    "Jon Irenicus": { owner: "Joost", salt: 5, scores: { oppressiveness: 6, winThreat: 2, interaction: 6, tablePanic: 4, turnCrimes: 1, politics: 7, funToFace: 9, podLore: 4 } },
+    "Toph": { owner: "Lenny", salt: 5.5, scores: { oppressiveness: 2, winThreat: 6.5, interaction: 4, tablePanic: 6, turnCrimes: 9, politics: 4, funToFace: 2, podLore: 8 } },
+    "Council of Four": { owner: "Joost", salt: 6.5, scores: { oppressiveness: 7, winThreat: 5.5, interaction: 6, tablePanic: 6, turnCrimes: 5, politics: 8, funToFace: 4, podLore: 4 } },
+    "Marrow-Gnawer": { owner: "Bjarne", salt: 7, scores: { oppressiveness: 3, winThreat: 7, interaction: 2, tablePanic: 6, turnCrimes: 5, politics: 3, funToFace: 7, podLore: 8 } },
+    "Eshki, Temur's Roar": { owner: "Lenny", salt: 6, scores: { oppressiveness: 4, winThreat: 6, interaction: 4, tablePanic: 6, turnCrimes: 2, politics: 3, funToFace: 5, podLore: 6 } },
+    "Toothy & Pir": { owner: "Lenny", salt: 8, scores: { oppressiveness: 2, winThreat: 7, interaction: 7, tablePanic: 7, turnCrimes: 4, politics: 5, funToFace: 8, podLore: 6 } },
+    "Magus Lucea Kane": { owner: "Bjarne", salt: 7, scores: { oppressiveness: 4, winThreat: 9, interaction: 4, tablePanic: 6, turnCrimes: 4, politics: 3, funToFace: 6, podLore: 4 } },
+    "Witherbloom, the Balancer": { owner: "Bjarne", salt: 8, scores: { oppressiveness: 3, winThreat: 8, interaction: 6, tablePanic: 8, turnCrimes: 4, politics: 4, funToFace: 6, podLore: 3 } },
+    "Joost's Mono-Black Deck": { owner: "Joost", salt: 7.5, scores: { oppressiveness: 6.5, winThreat: 8, interaction: 6, tablePanic: 7.5, turnCrimes: 2, politics: 4, funToFace: 7, podLore: 8 } },
+    "Teysa Karlov": { owner: "Lenny", salt: 8, scores: { oppressiveness: 4, winThreat: 9, interaction: 5, tablePanic: 9, turnCrimes: 7, politics: 4, funToFace: 5, podLore: 9 } },
+    "Mendicant Core": { owner: "Lenny", salt: 7, scores: { oppressiveness: 4, winThreat: 7, interaction: 4, tablePanic: 6, turnCrimes: 7, politics: 3, funToFace: 5, podLore: 4 } },
+    "Karlov of the Ghost Council": { owner: "Joost", salt: 9, scores: { oppressiveness: 9, winThreat: 8, interaction: 6, tablePanic: 8, turnCrimes: 2, politics: 5, funToFace: 5, podLore: 8 } },
+    "Muldrotha / Gyruda": { owner: "Bjarne", salt: 8.5, scores: { oppressiveness: 8, winThreat: 8, interaction: 7, tablePanic: 8, turnCrimes: 4, politics: 3, funToFace: 3, podLore: 4 } },
+    "Anikthea": { owner: "Lenny", salt: 8.5, scores: { oppressiveness: 4, winThreat: 9, interaction: 5, tablePanic: 8, turnCrimes: 9, politics: 3, funToFace: 5, podLore: 4 } },
+    "Raffine, Scheming Seer": { owner: "Bjarne", salt: 8, scores: { oppressiveness: 10, winThreat: 9, interaction: 8, tablePanic: 10, turnCrimes: 9, politics: 4, funToFace: 2, podLore: 6 } },
+    "Obeka, Splitter of Seconds": { owner: "Bjarne", salt: 8, scores: { oppressiveness: 7, winThreat: 8, interaction: 6, tablePanic: 10, turnCrimes: 10, politics: 2, funToFace: 2, podLore: 10 } },
+    "Kadena, Slinking Sorcerer": { owner: "Bjarne", salt: 9, scores: { oppressiveness: 10, winThreat: 10, interaction: 6, tablePanic: 10, turnCrimes: 8, politics: 3, funToFace: 5, podLore: 10 } },
+  };
+
+  // Native cards that must not appear in the active gallery at all (their decks are
+  // retired and live in ARCHIVED_DECKS instead). React re-adds these nodes on every
+  // render, so they are hidden with .is-archived-source rather than removed.
+  const HIDDEN_NATIVE_DECKS = ["Ashling Flame Dancer", "Aragorn, the Uniter"];
+
+  // Some native card titles are themselves rewritten at runtime by TEXT_EDIT_SEED
+  // ("Dromoka" -> "Dragonlord Dromoka"), and that rewrite races with React re-renders,
+  // so a card's <h3> can read either spelling on any given tick. Resolve both.
+  const NATIVE_TITLE_ALIASES = Object.values(TEXT_EDIT_SEED).reduce((aliases, entry) => {
+    if (entry && entry.original && entry.value && NATIVE_DECK_RATINGS[entry.value]) {
+      aliases[cleanText(entry.original)] = entry.value;
+    }
+    return aliases;
+  }, {});
+
+  function resolveNativeDeckTitle(title) {
+    if (NATIVE_DECK_RATINGS[title]) return title;
+    return NATIVE_TITLE_ALIASES[title] || title;
+  }
 
   const CUSTOM_ACTIVE_DECKS = [
     {
@@ -966,16 +1235,15 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       roast:
         "Lenny doesn't need to fill his own graveyard when Bjarne is right there volunteering.",
       tags: ["Graveyard", "Reanimator", "Rakdos", "Haste"],
-      salt: 7,
+      salt: 6.5,
       scores: {
         oppressiveness: 7,
         winThreat: 7,
-        funToFace: 5,
-        themeFlavor: 8,
-        chaosUnpredictability: 6,
-        comebackPotential: 8,
+        interaction: 5,
         tablePanic: 7,
         turnCrimes: 6,
+        politics: 4,
+        funToFace: 5,
         podLore: 7,
       },
     },
@@ -989,16 +1257,15 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       roast:
         "Bjarne called it grouphug. The pod believed him. The pod then watched 128 Scute Swarms arrive.",
       tags: ["Landfall", "Sultai", "Tokens", "Value"],
-      salt: 8,
+      salt: 7,
       scores: {
         oppressiveness: 6,
         winThreat: 8,
-        funToFace: 5,
-        themeFlavor: 8,
-        chaosUnpredictability: 4,
-        comebackPotential: 7,
+        interaction: 4,
         tablePanic: 7,
         turnCrimes: 8,
+        politics: 8,
+        funToFace: 5,
         podLore: 9,
       },
     },
@@ -1016,12 +1283,11 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       scores: {
         oppressiveness: 5,
         winThreat: 6,
-        funToFace: 6,
-        themeFlavor: 8,
-        chaosUnpredictability: 7,
-        comebackPotential: 4,
+        interaction: 7,
         tablePanic: 5,
         turnCrimes: 5,
+        politics: 3,
+        funToFace: 6,
         podLore: 4,
       },
     },
@@ -1039,12 +1305,11 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       scores: {
         oppressiveness: 4,
         winThreat: 6,
-        funToFace: 8,
-        themeFlavor: 8,
-        chaosUnpredictability: 6,
-        comebackPotential: 5,
+        interaction: 7,
         tablePanic: 5,
         turnCrimes: 3,
+        politics: 4,
+        funToFace: 8,
         podLore: 2,
       },
     },
@@ -1062,9 +1327,11 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       scores: {
         oppressiveness: 4,
         winThreat: 8,
-        funToFace: 8,
+        interaction: 3,
         tablePanic: 8,
         turnCrimes: 8,
+        politics: 4,
+        funToFace: 8,
         podLore: 6,
       },
     },
@@ -1202,10 +1469,12 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     if (strongs.length !== 2) return;
     if (!strongs[1].dataset.nativeTotal) strongs[1].dataset.nativeTotal = strongs[1].textContent;
     const nativeTotal = Number(strongs[1].dataset.nativeTotal) || 0;
-    const nativeShown = gallery.querySelectorAll(".deck-card:not([data-custom-deck])").length;
+    const nativeShown = gallery.querySelectorAll(
+      ".deck-card:not([data-custom-deck]):not(.is-archived-source)"
+    ).length;
     const customShown = gallery.querySelectorAll("[data-custom-deck]").length;
     strongs[0].textContent = String(nativeShown + customShown);
-    strongs[1].textContent = String(nativeTotal + CUSTOM_ACTIVE_DECKS.length);
+    strongs[1].textContent = String(visibleActiveDeckCount(nativeTotal));
   }
 
   function enhanceActiveDecks() {
@@ -1213,9 +1482,9 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     if (!gallery) return;
 
     gallery.querySelectorAll(".deck-card:not([data-custom-deck])").forEach((card) => {
-      const title = cleanText(card.querySelector("h3")?.textContent || "");
-      if (title === "Aragorn, the Uniter") transformAragornSlotToPendingDeck(card);
-      if (title === "Ashling Flame Dancer") card.classList.add("is-archived-source");
+      const title = resolveNativeDeckTitle(cleanText(card.querySelector("h3")?.textContent || ""));
+      if (HIDDEN_NATIVE_DECKS.includes(title)) card.classList.add("is-archived-source");
+      applyNativeDeckRating(card, title);
       if (title === "Witherbloom, the Balancer" && card.dataset.commanderArtFixed !== "true") {
         card.dataset.commanderArtFixed = "true";
         const commander = card.querySelector(".commander-line");
@@ -1233,12 +1502,6 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     CUSTOM_ACTIVE_DECKS.forEach((deck) => placeCustomDeckCard(gallery, deck));
     patchGalleryVisibleCount(gallery);
     hydrateCustomCardImages(gallery);
-
-    document.querySelectorAll("article strong").forEach((label) => {
-      if (cleanText(label.textContent) === "Aragorn, the Uniter") {
-        label.textContent = "Joost's New Boros Deck";
-      }
-    });
   }
 
   function escapeHtml(value) {
@@ -1899,6 +2162,7 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
         ensureGameNightTab();
         ensureArchiveTab();
         enhanceActiveDecks();
+        enhanceGlobalChrome();
         enhancePartnerCommanders();
         applyTextEdits();
         if (editMode) enableTextEditing();
@@ -1913,6 +2177,7 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       ensureGameNightTab();
       ensureArchiveTab();
       enhanceActiveDecks();
+      enhanceGlobalChrome();
       enhancePartnerCommanders();
       applyTextEdits();
       installListeners();
