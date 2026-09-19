@@ -106,6 +106,43 @@
   ];
   const GAME_NIGHT_SEED = [
     {
+      id: "2026-09-20-two-alternate-wins",
+      date: "2026-09-20",
+      nightWinner: "",
+      games: [
+        {
+          number: 1,
+          winner: "Lenny",
+          deck: "Pir and Toothy",
+          participants: ["Bjarne", "Joost", "Lenny", "Keanu"],
+        },
+        {
+          number: 2,
+          winner: "Bjarne",
+          deck: "Muldrotha, the Gravetide",
+          participants: ["Bjarne", "Joost", "Lenny", "Keanu"],
+        },
+        {
+          number: 3,
+          winner: "Joost",
+          deck: "Karlov of the Ghost Council",
+          participants: ["Bjarne", "Joost", "Lenny", "Keanu"],
+        },
+      ],
+      description:
+        `Keanu sat in for Huub, and Lenny opened on the kind of Pir and Toothy start that deck lies awake fantasizing about: several redundant ways to add extra +1/+1 counters, which meant Toothy was enormous almost immediately and drawing genuinely absurd numbers of cards by turn five. Bjarne was on Archelos, Keanu on Hashaton, Joost on Melek, and none of them got anywhere. When Toothy finally ate removal, Lenny cashed it in for a hand of roughly sixty cards—less a hand than a filing cabinet. Twenty-Toed Toad followed, and against that many held answers nothing was getting through: one removal spell got dodged with a flicker, the next got countered, and the Toad attacked straight into its own alternate win condition. Nobody at this table had ever won a game that way before.
+
+Game two put Lenny on Chainer, Nightmare Adept, Bjarne on Muldrotha, Keanu back on Hearthhull, and Joost on Melek again. Bjarne's graveyard started filling early. The first time he milled until he hit a basic land he found one almost instantly despite running only a handful, a result he took as a personal insult. The second attempt went the other way entirely and dumped most of the library into the yard, which is a lovely thing to do directly in front of a Chainer deck. Lenny tutored Etali, Primal Storm into the graveyard, brought it back, and watched one of its attack triggers turn up Bjarne's own Jin-Gitaxias, Core Augur—cast for free, naturally. Etali came back again. Jin-Gitaxias appeared twice. The board became a parade of enormous reanimated things that mostly used to belong to other people. Joost missed land drops and spectated; Keanu spent the game policing the only two players doing anything.
+
+By the late game Bjarne had most of his deck in the graveyard and finally cast Mortal Combat. It got removed before an upkeep could come around, so a turn or two later he simply cast it again. With something like twenty-five or thirty creature cards in the yard, nobody had a second answer. Two games into the night, two alternate win conditions, neither of which its pilot had ever managed to win with before.
+
+Game three—Lenny on Eshki, Bjarne on Witherbloom, Keanu on Hearthhull, Joost on Karlov—started fast, with Eshki putting about twenty damage into Bjarne early, and then stopped making sense entirely. Army of the Damned produced thirteen Zombies. Enduring Vitality turned all thirteen into mana dorks. From there the battlefield simply expanded: creatures everywhere, and Joost quietly gaining life off every single one that entered until he was somewhere near a hundred with a Karlov in the neighborhood of 200/200. Keanu's board wipe should have ended it. Bjarne had Heroic Intervention; Lenny, sitting on three mana, had one too, and chose to counter Bjarne's rather than protect his own board—knowingly torching his side of the table to make sure the Zombies went with it. Nearly everything died. Keanu kept a 21/21, killed Bjarne at fifteen, and then Joost's 200/200 Karlov swung once and removed Lenny. Heads-up, Joost found Platinum Angel, survived behind it, and ground out the win.
+
+Which was generous of the evening, because Joost's night had otherwise been miserable. After two games of doing very little he finally opened game three on Sol Ring into Signet—the dream—and Bjarne answered on the very next turn with an Ouphe shutting off activated abilities of artifacts. The explosive start was neutered on the spot, and it incidentally hosed Keanu too, Hearthhull being an artifact itself. Joost maintains that getting to play his new shiny Sol Ring was the most important event of the evening. He also won the game, which he has mentioned somewhat less.`,
+      participants: ["Bjarne", "Joost", "Lenny", "Keanu"],
+      tags: ["Combo scare", "Politics", "Mana issues", "Long turns"],
+    },
+    {
       id: "2026-09-16-grouphug-that-wasnt",
       date: "2026-09-16",
       nightWinner: "Bjarne",
@@ -919,6 +956,29 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
   };
 
   const CUSTOM_ACTIVE_DECKS = [
+    {
+      owner: "Lenny",
+      deckName: "Chainer, Nightmare Adept",
+      commander: "Chainer, Nightmare Adept",
+      colors: ["B", "R"],
+      note:
+        "Rakdos graveyard abuse: discard a land, cast a creature straight out of the yard, hand it haste, attack with it. Crucially it does not care whose graveyard is filling up, which makes it a natural predator of anyone self-milling at the same table. Debuted 20 September against a Muldrotha deck that had just put most of its library in the bin, with predictable results.",
+      roast:
+        "Lenny doesn't need to fill his own graveyard when Bjarne is right there volunteering.",
+      tags: ["Graveyard", "Reanimator", "Rakdos", "Haste"],
+      salt: 7,
+      scores: {
+        oppressiveness: 7,
+        winThreat: 7,
+        funToFace: 5,
+        themeFlavor: 8,
+        chaosUnpredictability: 6,
+        comebackPotential: 8,
+        tablePanic: 7,
+        turnCrimes: 6,
+        podLore: 7,
+      },
+    },
     {
       owner: "Bjarne",
       deckName: "Archelos, Lagoon Mystic",
