@@ -833,14 +833,23 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
       .join("")}</div>`;
   }
 
+  // Same 1-10 scale the bundle uses for native cards, so custom decks read identically.
+  const POWER_LEVEL_LABELS = {
+    1: "Golden retriever deck",
+    2: "Harmless little guy",
+    3: "Mostly fine",
+    4: "Slightly suspicious",
+    5: "Respectable menace",
+    6: "Annoying but acceptable",
+    7: "Table starts negotiating",
+    8: "Kill them first",
+    9: "Friendship stress test",
+    10: "Grave Geneva Convention Breach",
+  };
+
   function saltRatingLabel(salt) {
-    return salt >= 9
-      ? "Kill them first"
-      : salt >= 7
-        ? "Powerful but manageable"
-        : salt >= 5
-          ? "Respectable menace"
-          : "Mostly fine";
+    const tier = Math.max(1, Math.min(10, Math.round(Number(salt) || 0)));
+    return POWER_LEVEL_LABELS[tier];
   }
 
   function customDeckCard(deck, archived) {
@@ -906,43 +915,6 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
   function updateScoreCard(card, scores) {
     const grid = card.querySelector(".score-grid");
     if (grid) grid.outerHTML = scoreGrid(scores);
-  }
-
-  // The native cards render the bundle's own power level and 6-category grid. Rewrite
-  // both from NATIVE_DECK_RATINGS every tick — React re-renders these nodes freely, so
-  // this must be idempotent and must not depend on reading the card's current values.
-  function applyNativeDeckRating(card, rawTitle) {
-    const rating = NATIVE_DECK_RATINGS[resolveNativeDeckTitle(rawTitle)];
-    if (!rating) return;
-    const tone = scoreTone(rating.salt);
-    // Every write below is guarded: this runs on a MutationObserver tick, so writing an
-    // unchanged value would retrigger the observer and spin.
-    const setTone = (node) => {
-      if (node.classList.contains(tone)) return;
-      node.classList.remove("danger", "medium", "calm");
-      node.classList.add(tone);
-    };
-    const setText = (node, text) => {
-      if (node && node.textContent !== text) node.textContent = text;
-    };
-    const medallion = card.querySelector(".salt-medallion");
-    if (medallion) {
-      setTone(medallion);
-      setText(medallion.querySelector("strong"), `${rating.salt}/10`);
-    }
-    const strip = card.querySelector(".salt-strip");
-    if (strip) {
-      setTone(strip);
-      setText(strip.querySelector("strong"), saltRatingLabel(rating.salt));
-    }
-    if (card.dataset.salt !== String(rating.salt)) card.dataset.salt = String(rating.salt);
-    // Check the rendered pip count rather than a marker attribute: React reuses the
-    // .score-grid node across re-renders, so a data-flag survives while the children
-    // underneath it get reverted to the bundle's own 6-category grid.
-    const grid = card.querySelector(".score-grid");
-    if (grid && grid.querySelectorAll(".score-pip").length !== 8) {
-      updateScoreCard(card, rating.scores);
-    }
   }
 
   // "Salt rating" was renamed to "Power level" — the label lives inside the compiled
@@ -1173,10 +1145,11 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     podLore: "Pod Lore",
   };
 
-  // Native decks live in the compiled React bundle and cannot be edited at source.
-  // This table is the hand-maintained override applied over each native card on every
-  // gallery tick: the power level (formerly "salt") plus the full 8-category score set.
-  // Keys must match the card's <h3> text exactly.
+  // MIRROR of the native deck ratings that now live in the compiled bundle's own deck
+  // array (patched 20 Sep 2026). The bundle renders the cards, charts, sorting and
+  // filtering from its copy; this one exists only so the stats patches below can do
+  // maths across natives AND custom decks together, which the bundle cannot see.
+  // KEEP THE TWO IN SYNC: changing a number here means re-patching the bundle too.
   const NATIVE_DECK_RATINGS = {
     "Emiel the Blessed": { owner: "Huub", salt: 3, scores: { oppressiveness: 3, winThreat: 2, interaction: 4, tablePanic: 2, turnCrimes: 2, politics: 3, funToFace: 8, podLore: 7 } },
     "Dragonlord Dromoka": { owner: "Huub", salt: 4, scores: { oppressiveness: 5, winThreat: 4, interaction: 3, tablePanic: 4, turnCrimes: 2, politics: 2, funToFace: 8, podLore: 3 } },
@@ -1204,25 +1177,11 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     "Kadena, Slinking Sorcerer": { owner: "Bjarne", salt: 9, scores: { oppressiveness: 10, winThreat: 10, interaction: 6, tablePanic: 10, turnCrimes: 8, politics: 3, funToFace: 5, podLore: 10 } },
   };
 
-  // Native cards that must not appear in the active gallery at all (their decks are
-  // retired and live in ARCHIVED_DECKS instead). React re-adds these nodes on every
-  // render, so they are hidden with .is-archived-source rather than removed.
-  const HIDDEN_NATIVE_DECKS = ["Ashling Flame Dancer", "Aragorn, the Uniter"];
+  // Ashling and Aragorn were removed from the bundle's own deck array on 20 Sep 2026,
+  // so nothing needs hiding here any more. Kept as the supported way to pull a deck out
+  // of the gallery without re-patching the bundle.
+  const HIDDEN_NATIVE_DECKS = [];
 
-  // Some native card titles are themselves rewritten at runtime by TEXT_EDIT_SEED
-  // ("Dromoka" -> "Dragonlord Dromoka"), and that rewrite races with React re-renders,
-  // so a card's <h3> can read either spelling on any given tick. Resolve both.
-  const NATIVE_TITLE_ALIASES = Object.values(TEXT_EDIT_SEED).reduce((aliases, entry) => {
-    if (entry && entry.original && entry.value && NATIVE_DECK_RATINGS[entry.value]) {
-      aliases[cleanText(entry.original)] = entry.value;
-    }
-    return aliases;
-  }, {});
-
-  function resolveNativeDeckTitle(title) {
-    if (NATIVE_DECK_RATINGS[title]) return title;
-    return NATIVE_TITLE_ALIASES[title] || title;
-  }
 
   const CUSTOM_ACTIVE_DECKS = [
     {
@@ -1482,9 +1441,8 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
     if (!gallery) return;
 
     gallery.querySelectorAll(".deck-card:not([data-custom-deck])").forEach((card) => {
-      const title = resolveNativeDeckTitle(cleanText(card.querySelector("h3")?.textContent || ""));
+      const title = cleanText(card.querySelector("h3")?.textContent || "");
       if (HIDDEN_NATIVE_DECKS.includes(title)) card.classList.add("is-archived-source");
-      applyNativeDeckRating(card, title);
       if (title === "Witherbloom, the Balancer" && card.dataset.commanderArtFixed !== "true") {
         card.dataset.commanderArtFixed = "true";
         const commander = card.querySelector(".commander-line");
