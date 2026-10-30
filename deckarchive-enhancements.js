@@ -106,6 +106,55 @@
   ];
   const GAME_NIGHT_SEED = [
     {
+      id: "2026-10-29-thirty-dragons-approach",
+      date: "2026-10-29",
+      nightWinner: "",
+      games: [
+        {
+          number: 1,
+          winner: "Lenny",
+          deck: "Davros, Dalek Creator",
+          participants: ["Bjarne", "Joost", "Lenny", "Niels"],
+        },
+        {
+          number: 2,
+          winner: "Bjarne",
+          deck: "Obeka, Splitter of Seconds",
+          participants: ["Bjarne", "Joost", "Lenny", "Niels"],
+        },
+        {
+          number: 3,
+          winner: "Lenny",
+          deck: "Pir and Toothy",
+          participants: ["Bjarne", "Joost", "Lenny", "Niels"],
+        },
+        {
+          number: 4,
+          winner: "",
+          deck: "",
+          draw: true,
+          note: "Davros went infinite through Niels' angel",
+          participants: ["Bjarne", "Joost", "Lenny", "Niels"],
+        },
+        {
+          number: 5,
+          winner: "Bjarne",
+          deck: "Witherbloom, the Balancer",
+          participants: ["Bjarne", "Joost", "Lenny", "Niels"],
+        },
+      ],
+      description:
+        `Niels sat in for Huub and spent the whole night on his upgraded Angel precon, and the honest summary is that the gap between his deck and the other three was wide enough to park a Dalek in. Lenny opened on Davros, Dalek Creator—one of the very first decks he ever built, since gutted and rebuilt around a single sorcery. Dragon's Approach is one of those cards the rules let you run in any number, and Lenny has taken that as a personal challenge: there are somewhere around thirty of them in there. Game one was slow. Three damage to each opponent at a time is a drizzle, not a storm, and for a long while the table treated it that way. Then Thrumming Stone came down. Ripple 4 in a deck that is mostly one card means every Dragon's Approach flips four more, most of which are Dragon's Approach, each of which flips four more. The game ended that same turn.
+
+Bjarne answered with Obeka, Splitter of Seconds, whose whole pitch is that connecting in combat buys you extra upkeep steps. It connected. At one point he was sitting on eighteen upkeeps, which is less a turn than a fiscal quarter, and somewhere in the paperwork Joost scooped rather than watch the rest of it. Game three needs almost no explanation: Lenny on Pir and Toothy, counters going on, cards coming in, and simply more value than anyone could keep pace with. For the record, Joost put up a real fight every single game, did a lot, and won none of them—a stat line the archive notes with genuine sympathy.
+
+Game four is the one that will be relitigated. Lenny was back on Davros, found Thrumming Stone again, and went infinite again—except this time Niels had an angel on the battlefield that said, in plain text, that he couldn't lose the game and his opponents couldn't win it. Nobody caught it. Not Niels, not Lenny, not anyone being burned out of the game. The Dragon's Approaches resolved, the cards went back in the boxes, and only afterwards did anyone actually read the board. The table was not unanimous on the ruling, but the ruling stands: a draw. Officially nobody won game four; morally it belongs to Lenny or Niels, depending on who you ask and how loudly.
+
+By the last game Bjarne had had enough and brought out Witherbloom, the Balancer. The start was painfully slow, and then it very much wasn't: a whirlwind of small creatures, near-infinite mana and near-infinite Insects. Joost, on Karlov of the Ghost Council, gained life off the entire stampede until he was sitting around nine hundred, with a Karlov somewhere north of 900/900. Then he lost nine hundred life. Then he drew nine hundred cards, which went about as well as drawing nine hundred cards from a hundred-card deck usually goes. Lenny and Niels followed him out a turn later. Two wins for Lenny, two for Bjarne, one draw, and no clear night winner—though Joost, who did everything except win, has a decent case for some kind of award.`,
+      participants: ["Bjarne", "Joost", "Lenny", "Niels"],
+      tags: ["Combo scare", "Long turns", "Salt spike"],
+    },
+    {
       id: "2026-09-20-two-alternate-wins",
       date: "2026-09-20",
       nightWinner: "",
@@ -1186,6 +1235,28 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
   const CUSTOM_ACTIVE_DECKS = [
     {
       owner: "Lenny",
+      deckName: "Davros, Dalek Creator",
+      commander: "Davros, Dalek Creator",
+      colors: ["U", "B", "R"],
+      note:
+        "One of Lenny's very first decks, since rebuilt from the ground up as a Dragon's Approach deck: roughly thirty copies of a sorcery the rules let you run in any number. Every cast burns each opponent for 3, which is exactly the threshold Davros needs to make Daleks and hand out villainous choices, and a stack of them in the graveyard tutors up a Dragon. Thrumming Stone turns it into a chain reaction that ends the game the turn it lands. It did that twice on its first logged night.",
+      roast:
+        "Thirty copies of the same card, two infinite combos in one night, and he still only got credit for one of them.",
+      tags: ["Grixis", "Burn", "Combo", "Dragon's Approach"],
+      salt: 7.5,
+      scores: {
+        oppressiveness: 4,
+        winThreat: 8,
+        interaction: 3,
+        tablePanic: 8,
+        turnCrimes: 6,
+        politics: 2,
+        funToFace: 5,
+        podLore: 8,
+      },
+    },
+    {
+      owner: "Lenny",
       deckName: "Chainer, Nightmare Adept",
       commander: "Chainer, Nightmare Adept",
       colors: ["B", "R"],
@@ -1505,7 +1576,7 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
           .map((game) =>
             [
               String(game.number || "").trim(),
-              cleanText(String(game.winner || "")),
+              cleanText(String(game.winner || (game.draw ? "draw" : ""))),
               cleanText(String(game.deck || game.winningDeck || "")),
             ].join(":")
           )
@@ -1555,9 +1626,13 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
           number: game.number || index + 1,
           winner: String(game.winner || "").trim(),
           deck: String(game.deck || game.winningDeck || "").trim(),
+          // A drawn game counts as played (games logged, win-rate denominators) but
+          // has no winner and no winning deck, so the tallies skip it on their own.
+          draw: Boolean(game.draw),
+          note: String(game.note || "").trim(),
           participants: Array.isArray(game.participants) ? game.participants.map(String) : null,
         }))
-        .filter((game) => game.winner || game.deck);
+        .filter((game) => game.winner || game.deck || game.draw);
     }
     if (entry.winner || entry.winningDeck) {
       return [
@@ -1764,8 +1839,8 @@ Out came Raffine from Bjarne's side in order to outvalue the rest, but drawing c
                 (game) => `
                   <li>
                     <span>Game ${escapeHtml(game.number)}</span>
-                    <strong>${escapeHtml(game.winner || "Unknown winner")}</strong>
-                    <em>${escapeHtml(game.deck || "Unknown deck")}</em>
+                    <strong>${escapeHtml(game.draw ? "Draw" : game.winner || "Unknown winner")}</strong>
+                    <em>${escapeHtml(game.draw ? game.note || "No winner" : game.deck || "Unknown deck")}</em>
                   </li>
                 `
               )
